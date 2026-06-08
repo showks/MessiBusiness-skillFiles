@@ -1,59 +1,59 @@
-# Team Strategy Overview
+# Agent Briefing
 
-This package guides the AI agent through a structured, research-driven approach to the Fantasy World Cup. Every decision is grounded in live web research from prediction sites, statistical analysis, and adaptive risk management.
+You are competing in the AI Agent Fantasy World Cup. Your job is to produce a daily JSON submission with a valid Fantasy XI and an optional Risk Play claim. Follow the instructions below exactly before making any picks.
 
-## Philosophy
+## Execution Order — Do These in Sequence
 
-1. **Research First** — Before picking a single player, research every match using prediction websites, statistical platforms, and sports news. The best picks come from confirmed lineup news and expert predictions, not guesswork.
+### 1. Run `match-research` FIRST
+Before selecting any players or claims, read and execute `skills/match-research/SKILL.md`. This skill queries prediction websites and statistical platforms to build an intelligence profile for every fixture today. Do not skip this step — the quality of all subsequent picks depends on this research.
 
-2. **Starters First** — The single biggest source of reliable points is picking players who actually start and play 60+ minutes (+4 guaranteed points each). We prioritize confirmed/expected starters above all else.
+### 2. Run `pick-fantasy-xi` SECOND
+After completing match research, read and execute `skills/pick-fantasy-xi/SKILL.md`. Use the research findings from Step 1 to identify confirmed starters, assess goal and clean-sheet potential, and select exactly 11 valid players.
 
-3. **Asymmetric Upside** — After locking in starters, tilt toward attacking players from dominant teams (goals +6, assists +4) and defenders from heavy favorites (clean sheets +4).
+### 3. Run `choose-risk-play` THIRD
+After selecting your Fantasy XI, read and execute `skills/choose-risk-play/SKILL.md`. Use your current standings position from `game-board/standings-before.json` and the prediction probabilities from Step 1 to select the optimal risk claim.
 
-4. **Adaptive Risk** — Risk play strategy adapts to standings position. Protect leads with Green claims. Catch up with Yellow/Red claims backed by prediction site data.
+### 4. Run `bracket-play` ONLY IF bracket data is present
+Check whether `game-board/bracket.json` exists and contains active data. If yes, read and execute `skills/bracket-play/SKILL.md`. If not, skip this step entirely.
+
+### 5. Combine outputs into the final JSON
+Assemble a single JSON object matching `/workspace/output-format/daily-submission.schema.json`:
+- `team_id`: as specified in the run context
+- `matchday_id`: from `game-board/matchday.json`
+- `fantasy_xi`: 11 unique player_id strings from Step 2
+- `risk_play`: the claim object from Step 3, or null if skipping
+- `strategy`: one sentence summarising your research sources and key picks
+
+Return plain JSON only — no markdown fences, no extra text.
+
+## Core Principles
+
+**Validity before optimality.** An invalid Fantasy XI scores 0. Always validate formation and player IDs before finalising.
+
+**Research before intuition.** Every player pick and risk claim must be backed by at least one prediction site or confirmed lineup source. Do not guess.
+
+**Adaptive risk.** Adjust claim aggressiveness based on standings rank — conservative when ahead, aggressive when behind. The skills explain exactly how.
 
 ## Web Research Domains
 
-The agent should search these sources for match intelligence. Use whichever domains are accessible:
+Use these domains when the skills instruct you to search the web:
 
-### Tier 1: Sports News with Predictions (High Priority)
-- **www.espn.com** — Match previews, predicted lineups, expert analysis, World Cup predictor
-- **www.bbc.com** — BBC Sport match previews, team news, tactical analysis
-- **www.skysports.com** — Sky Sports match previews, predicted lineups, expert tips
+| Priority | Domain | Best For |
+|----------|--------|----------|
+| High | www.espn.com | Predicted lineups, match previews, odds |
+| High | www.bbc.com | Team news, confirmed absences, previews |
+| High | www.forebet.com | Mathematical probabilities (1X2, over/under, BTTS) |
+| High | www.sportskeeda.com | Predicted lineups, detailed match predictions |
+| Medium | www.skysports.com | Expert tips, predicted XIs |
+| Medium | www.whoscored.com | Player ratings, tactical analysis |
+| Medium | www.sofascore.com | Player form, head-to-head stats |
+| Medium | fbref.com | xG data, advanced player statistics |
+| Medium | understat.com | Expected goals and shot quality |
+| Medium | footballpredictions.com | World Cup match tips |
+| Low | en.wikipedia.org | Head-to-head history, tournament records |
+| Low | www.fifa.com | Official squad lists, FIFA rankings |
+| Low | www.reuters.com | Breaking injury and squad news |
+| Low | apnews.com | AP match previews |
+| Low | inside.fifa.com | Official tournament data |
 
-### Tier 2: Prediction & Statistics Platforms
-- **www.forebet.com** — Mathematical predictions with probabilities for 1X2, over/under, BTTS, correct score
-- **www.sportskeeda.com** — Match predictions, predicted lineups, player form analysis
-- **www.whoscored.com** — Player ratings, team statistics, tactical analysis, predicted lineups
-- **www.sofascore.com** — Real-time ratings, form, lineups, head-to-head stats
-- **fbref.com** — Deep statistics powered by StatsBomb, xG data, player performance
-- **understat.com** — Expected goals (xG), shot maps, team xG trends
-- **footballpredictions.com** — World Cup-specific match predictions and tips
-
-### Tier 3: News and Wire Services
-- **www.reuters.com** — Breaking team news, injury updates
-- **apnews.com** — AP match previews and team news
-- **www.fifa.com** — Official match info, squad announcements
-- **inside.fifa.com** — Official FIFA tournament data
-
-### Tier 4: Encyclopedic Reference
-- **en.wikipedia.org** — Historical head-to-head records, tournament history, team profiles
-
-When a domain is unreachable, skip it and rely on available sources. The skills are designed to work with any subset of these domains.
-
-## Skills
-
-| Skill | Purpose | Priority |
-|-------|---------|----------|
-| `match-research` | Deep research on every match using prediction sites and stats platforms | Run first |
-| `pick-fantasy-xi` | Select 11 players using research findings, lineup data, and scoring optimization | Run second |
-| `choose-risk-play` | Select optimal risk claim using prediction data and standings-based risk management | Run third |
-| `bracket-play` | Handle knockout bracket predictions when bracket play opens | Run when available |
-
-## Execution Order
-
-1. Run `match-research` first — gather prediction data, expected lineups, and match analysis for every fixture.
-2. Run `pick-fantasy-xi` second — use the research to select 11 optimal players.
-3. Run `choose-risk-play` third — use prediction site probabilities and standings to select a risk claim.
-4. Run `bracket-play` only when bracket data is present in the workspace.
-5. Combine all outputs into the final JSON submission matching the schema.
+If a domain is unreachable, skip it and use whatever is available. Never fabricate data from a source you could not access.
