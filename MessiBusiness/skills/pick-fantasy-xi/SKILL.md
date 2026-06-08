@@ -96,49 +96,89 @@ Using research findings, estimate expected fantasy points for each player:
 - Defensive midfielder in a high-stakes match: **-0.3**
 - Player from a team known for physical play: **-0.2**
 
-## Step 5: Optimize Formation and Selection
+## Step 5: Build Position Pools (DO THIS BEFORE PICKING)
 
-### Formation Selection
-Choose the formation that maximizes total expected points across all 11 picks:
+Formation errors score 0. To make an illegal formation **structurally impossible**, you must select by filling position quotas, never by picking "best players" and hoping the counts work out.
 
-| Formation | When to Use |
-|-----------|-------------|
-| 1-3-5-3 | Many strong midfielders, 3 elite forwards available |
-| 1-3-4-3 | 3 elite forwards, balanced midfield options |
-| 1-4-3-3 | Strong clean sheet opportunity + 3 elite forwards |
-| 1-4-4-2 | Strong clean sheet opportunity + good midfielders but only 2 standout forwards |
-| 1-5-3-2 | Multiple clean sheet opportunities across teams |
-| 1-5-4-1 | Extreme clean sheet play, only 1 elite forward |
+First, sort EVERY eligible player into exactly one of four pools, using the `position` field from `players.json` as the only authority. Do not infer position from web research — a player's pool is whatever `players.json` says (`GK`, `DEF`, `MID`, or `FWD`).
 
-### Selection Algorithm
-1. Rank all eligible players by expected fantasy points.
-2. Pick the top GK (considering both clean sheet potential AND save bonus).
-3. Pick the top 3 forwards by expected points.
-4. Determine whether to add DEF or MID slots based on which remaining players score highest.
-5. Fill remaining slots to reach exactly 11 while respecting formation constraints.
-6. **Diversification**: Spread picks across at least 2-3 different matches when possible. Don't put all 11 from one match unless one fixture is overwhelmingly dominant.
+```
+GK pool  = [eligible players where position == "GK"],  sorted by expected points
+DEF pool = [eligible players where position == "DEF"], sorted by expected points
+MID pool = [eligible players where position == "MID"], sorted by expected points
+FWD pool = [eligible players where position == "FWD"], sorted by expected points
+```
 
-### Key Player Archetypes to Target
-- **The penalty taker on the favored team** — penalties are +6 points and occur in ~25% of matches
-- **The set-piece specialist** — free kicks and corners create both goal and assist opportunities
-- **Full-backs on dominant teams** — they play 90 min (start bonus), get clean sheets, AND occasionally assist from crosses
-- **The target striker** — the #9 who takes the most shots for a strong team
+Confirm each pool is non-empty enough to fill a legal formation. You need at least 1 GK, 3 DEF, 3 MID, and 1 FWD available. (The board normally has dozens of each.)
 
-## Step 6: Final Validation
+## Step 6: Commit to a Formation, Then Fill Exact Quotas
 
-Before outputting, verify ALL of these:
-- [ ] Exactly 11 unique `player_id` values
-- [ ] Exactly 1 GK
-- [ ] 3 to 5 DEF
-- [ ] 3 to 5 MID
-- [ ] 1 to 3 FWD
-- [ ] Total = 11
-- [ ] Every `player_id` exists in `players.json`
-- [ ] Every player's `eligible_matchday_ids` includes today's matchday
-- [ ] No duplicate player IDs
+### 6a. Write down ONE formation as four explicit numbers
 
-If ANY check fails, fix it immediately. An invalid XI scores 0 — this is the single worst outcome.
+Pick exactly one row. Write its quotas down as `GK / DEF / MID / FWD` and treat them as a hard contract. Every legal formation sums to 11 with 1 GK, 3-5 DEF, 3-5 MID, 1-3 FWD:
 
-## Step 7: Output
+| Formation | GK | DEF | MID | FWD | When to Use |
+|-----------|----|----|-----|-----|-------------|
+| 1-3-5-3 | 1 | 3 | 5 | 3 | Many strong midfielders + 3 elite forwards |
+| 1-3-4-3 | 1 | 3 | 4 | 3 | 3 elite forwards, balanced midfield |
+| 1-4-3-3 | 1 | 4 | 3 | 3 | Clean-sheet team + 3 elite forwards |
+| 1-4-4-2 | 1 | 4 | 4 | 2 | Clean-sheet team + good mids, only 2 standout forwards |
+| 1-4-5-1 | 1 | 4 | 5 | 1 | Midfield-heavy, only 1 elite forward |
+| 1-5-3-2 | 1 | 5 | 3 | 2 | Multiple clean-sheet opportunities |
+| 1-5-4-1 | 1 | 5 | 4 | 1 | Extreme clean-sheet play, 1 elite forward |
 
-Return the 11 `player_id` values as a JSON array of strings for `fantasy_xi`. Write a short `strategy` note explaining: which prediction sources you used, why you chose this formation, and which players you expect to score highest.
+Default to **1-4-4-2** or **1-4-3-3** if unsure — both are always legal and balanced.
+
+### 6b. Fill each quota from ONLY its own pool
+
+Take exactly the quota number from the top of each pool. Because you draw GKs only from the GK pool, you cannot end up with 2 GKs.
+
+```
+selected_GK  = top 1 from GK pool          (always exactly 1)
+selected_DEF = top [DEF quota] from DEF pool
+selected_MID = top [MID quota] from MID pool
+selected_FWD = top [FWD quota] from FWD pool
+fantasy_xi   = selected_GK + selected_DEF + selected_MID + selected_FWD
+```
+
+You may swap a default top pick for a lower one in the SAME pool for strategic reasons (e.g., a confirmed starter over a benched star, or diversifying across matches). Swapping within a pool never changes the position counts, so the formation stays legal.
+
+- **Diversification**: Prefer spreading picks across 2-3 matches. Swap within a pool to achieve this — never by changing a position quota.
+- **Archetypes to favor within pools**: penalty takers on favored teams (+6 goal upside), set-piece specialists, attacking full-backs (90 min + clean sheet + assist upside), the main #9 striker.
+
+## Step 7: Mandatory Recount and Repair Loop
+
+Do NOT output until this passes. Re-read the `position` field in `players.json` for each of your 11 chosen `player_id` values and tally them fresh (do not trust your memory of which pool you used):
+
+```
+count_GK  = number of chosen players whose players.json position == "GK"
+count_DEF = number of chosen players whose players.json position == "DEF"
+count_MID = number of chosen players whose players.json position == "MID"
+count_FWD = number of chosen players whose players.json position == "FWD"
+total     = count_GK + count_DEF + count_MID + count_FWD
+```
+
+Check ALL of these. Every one must be true:
+- `total == 11`
+- `count_GK == 1`  (exactly one — not zero, not two)
+- `3 <= count_DEF <= 5`
+- `3 <= count_MID <= 5`
+- `1 <= count_FWD <= 3`
+- All 11 `player_id` values are unique (no duplicates)
+- Every `player_id` exists in `players.json` and lists today's `matchday_id` in `eligible_matchday_ids`
+
+### If ANY check fails, repair and recount:
+- **count_GK == 2** → remove the weaker GK; add the best unused player from whichever outfield pool is below its minimum.
+- **count_GK == 0** → remove your weakest outfield player; add the best GK.
+- **count_DEF > 5** → remove the weakest DEF; add the best unused MID or FWD that is under quota.
+- **count_DEF < 3** → remove the weakest over-quota outfielder; add the best unused DEF.
+- **count_MID > 5 or < 3** → same logic: trim the surplus position, top up the deficient one.
+- **count_FWD > 3** → remove weakest FWD; add best unused DEF/MID under quota.
+- **count_FWD == 0** → remove weakest over-quota outfielder; add the best FWD.
+- **duplicate / ineligible id** → drop it and add the best unused, eligible player of the SAME position.
+
+After ANY change, run the entire tally and checklist again from the top. Repeat until every check passes. Only then proceed to output. A valid XI that is slightly suboptimal beats an invalid XI that scores 0 every time.
+
+## Step 8: Output
+
+Return the 11 `player_id` values as a JSON array of strings for `fantasy_xi`, ordered GK → DEF → MID → FWD so the formation is easy to verify. Write a short `strategy` note stating the formation you used (e.g., "1-4-4-2"), the prediction sources consulted, and your top expected scorers.

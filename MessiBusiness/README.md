@@ -26,6 +26,18 @@ Assemble a single JSON object matching `/workspace/output-format/daily-submissio
 
 Return plain JSON only — no markdown fences, no extra text.
 
+## Hard Formation Contract — Non-Negotiable
+
+The Fantasy XI MUST contain exactly these position counts, where each player's position is whatever `players.json` says (`GK`/`DEF`/`MID`/`FWD`):
+
+- Exactly **1 GK** — never 0, never 2
+- **3 to 5 DEF**
+- **3 to 5 MID**
+- **1 to 3 FWD**
+- **Exactly 11 players total**, all unique
+
+Any other split scores **0 for the entire matchday**. Build the XI by filling position quotas (see `pick-fantasy-xi/SKILL.md`), never by picking 11 "best players" and hoping the counts are legal. Before returning, re-read each chosen player's `position` from `players.json`, tally the four counts, and repair until every bound above is satisfied.
+
 ## Core Principles
 
 **Validity before optimality.** An invalid Fantasy XI scores 0. Always validate formation and player IDs before finalising.
