@@ -43,6 +43,7 @@ Use this decision tree to select the optimal formation for each matchday:
 
 ## Key Principles
 
+0. "Elite forward" means an elite player on the FAVORED side of a match. An underdog's striker is never elite for fantasy purposes regardless of reputation — if you can't find 2-3 elite forwards from favored teams, drop to a 1-2 FWD formation rather than filling FWD slots with underdog players (our warmup Iceland/Congo forwards returned 4 and 2 points).
 1. Never pick a formation just because it sounds good — pick the one that puts your highest-expected-value players on the sheet.
 2. The formation constraint (3-5 DEF, 3-5 MID, 1-3 FWD) is a binding constraint, not a suggestion. Always validate before submitting.
 3. If forced to choose between an extra defender for clean sheet points vs an extra midfielder for goal/assist potential, favor the midfielder — goals (+6) and assists (+4) have higher expected value than clean sheets (+4) since clean sheets require the whole team to not concede.

@@ -38,6 +38,14 @@ The Fantasy XI MUST contain exactly these position counts, where each player's p
 
 Any other split scores **0 for the entire matchday**. Build the XI by filling position quotas (see `pick-fantasy-xi/SKILL.md`), never by picking 11 "best players" and hoping the counts are legal. Before returning, re-read each chosen player's `position` from `players.json`, tally the four counts, and repair until every bound above is satisfied.
 
+## Warmup Post-Mortem — Binding Corrections (from 2026-06-10, rank 21)
+
+These three errors cost us the warmup. They are corrected throughout the skills and are binding:
+
+1. **Never leave an eligible superstar out of the XI.** Messi was in the player pool and we did not pick him. `players.json` is ground truth for availability — scan it BEFORE any research against the web-verified Global Superstar Shortlist and all-48-teams star table in `skills/pick-fantasy-xi/references/world-cup-2026-knowledge.md`, and auto-pick those expected to start. Never assume a star is retired or absent based on narratives. **One exception — injuries**: check the Injury Watchlist in that file plus a fresh `"[player] injury"` search; a superstar stated to MISS the match is excluded entirely, and a doubtful one is picked only if fresh predicted lineups confirm he starts (e.g., as of 2026-06-10 Neymar is doubtful for June 13 vs Morocco).
+2. **Default Green risk claim is `match_2plus_goals` on the match with the strongest favorite** — NOT `no_goal_first_10`, which lost an 8-point stake when Argentina scored inside 10 minutes. Never take `no_goal_first_10` in a match involving a heavy favorite; favorites press from kickoff.
+3. **The 60-minute threshold gates both the minutes bonus AND the clean-sheet bonus.** Four of our starters (Otamendi, L. Martinez, Lo Celso, Palacios) were subbed before 60' and returned +2 each despite Argentina's 3-0 clean sheet. Prefer full-90 profiles (GK, first-choice fullbacks, main striker, talisman); discount veteran rotation candidates on dominant teams. And never fill slots with underdog players for "diversification" — our Iceland/Congo picks returned 10 points from 3 slots. Diversify only with the favored side of other matches.
+
 ## Core Principles
 
 **Validity before optimality.** An invalid Fantasy XI scores 0. Always validate formation and player IDs before finalising.

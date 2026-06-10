@@ -59,10 +59,18 @@ Record for each match:
 
 ### 2d. Search for Key Player Intel
 
+**First, scan `game-board/players.json` for global superstars in today's eligible pool**, using the web-verified Global Superstar Shortlist and all-48-teams star table in `../pick-fantasy-xi/references/world-cup-2026-knowledge.md`. The pool is ground truth: any superstar listed as eligible IS at the tournament and pickable — never write one off from memory or pre-tournament narratives. Flag every eligible superstar prominently in the research summary so the XI skill cannot miss them (we missed an eligible Messi in the warmup and paid for it).
+
+**Then verify each flagged superstar's fitness** — the Injury Watchlist in that same knowledge file is the starting point (snapshot 2026-06-10), but always run fresh searches and let fresh news win:
+- Search: `"[Player name] injury"` and `"[Team name] team news World Cup 2026"`
+- Record one status per superstar: **OUT** (stated to miss this match / not in squad / suspended — exclude from all picks), **DOUBTFUL** (fitness race or game-time decision — pick only with a confirmed predicted-lineup start), or **FIT** (auto-pick candidate)
+- Known watch items as of 2026-06-10: Neymar (calf, uncertain for June 13 vs Morocco), Yamal (targeted ~June 15), Romero/Molina (Argentina), Kudus (Ghana), Merino (Spain), Jose Gimenez (Uruguay)
+
 For the star players on each team:
 - Search: `"[Player name] World Cup 2026 form"` for current fitness and form
 - Search: `"[Player name] goals assists 2025-2026 season"` for recent stats
 - Check if the player is their team's penalty taker or set-piece specialist
+- Check whether the player starts and typically plays the full 90 — flag likely early-sub candidates (veteran CBs/holding mids on heavy favorites), since a sub before 60' forfeits the minutes AND clean-sheet bonuses
 
 ## Step 3: Compile a Research Summary
 
@@ -85,6 +93,7 @@ MATCH PREDICTION:
 - Confidence level: [High/Medium/Low]
 
 KEY PLAYERS TO TARGET:
+- Eligible superstars in today's pool: [names + player_ids — auto-pick candidates, never omit]
 - Top goal threat: [Player name] (player_id: XXX) — [reason]
 - Top assist threat: [Player name] (player_id: XXX) — [reason]
 - Clean sheet candidates: [Team name] defenders if they are favored

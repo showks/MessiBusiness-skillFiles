@@ -13,13 +13,16 @@ Data-driven baselines from past World Cups to calibrate predictions when web res
 | Average | — | 2.53 | 73% | 52% | ~5% |
 
 ### Goal Timing Distribution (2022 World Cup)
-| Period | Goals Scored | % of Total | Claim Relevance |
-|--------|-------------|------------|-----------------|
-| 0-10 min | 15 | 8.7% | `no_goal_first_10` hits ~91% |
-| 11-45 min | 62 | 36.0% | `goal_before_halftime` hits ~75% |
-| 46-80 min | 67 | 39.0% | Most goals come mid-second half |
-| 81-90 min | 11 | 6.4% | Late drama but not common |
-| Stoppage time | 17 | 9.9% | `no_goal_stoppage_time` hits ~80% |
+
+**WARNING — read the math correctly.** "% of total goals" is NOT "% of matches". To estimate a claim probability, divide the goal count by 64 matches to get goals-per-match in that window, then convert to the chance of at least one goal. An earlier version of this table confused the two, advertised `no_goal_first_10` at ~91%, and cost us an 8-point stake in the warmup (Argentina scored inside 10' vs Iceland).
+
+| Period | Goals Scored | % of Total | Per-Match Rate | Claim Relevance |
+|--------|-------------|------------|----------------|-----------------|
+| 0-10 min | 15 | 8.7% | ~0.23/match | A first-10 goal occurs in ~20-25% of matches (more vs heavy favorites) → `no_goal_first_10` hits only ~75-80%, and ~60-65% in blowouts |
+| 11-45 min | 62 | 36.0% | ~0.97/match | `goal_before_halftime` hits ~75% |
+| 46-80 min | 67 | 39.0% | ~1.05/match | Most goals come mid-second half |
+| 81-90 min | 11 | 6.4% | ~0.17/match | Late drama but not common |
+| Stoppage time | 17 | 9.9% | ~0.27/match | A stoppage-time goal occurs in ~22-25% of matches (long modern added time) → `no_goal_stoppage_time` hits ~75%, not 80%+ |
 
 ## Card Statistics
 

@@ -47,8 +47,8 @@ For the match's archetype, estimate each claim's probability:
 #### Blowout Match (e.g., Brazil vs Haiti)
 | Claim | Estimated Probability | Reasoning |
 |-------|----------------------|-----------|
-| `match_2plus_goals` | 90% | Favorite will score multiple |
-| `no_goal_first_10` | 80% | Even favorites rarely score in first 10 |
+| `match_2plus_goals` | 90% | Favorite will score multiple — THE green pick for this archetype |
+| `no_goal_first_10` | 60% | DO NOT TAKE — favorites press from kickoff (warmup: Argentina scored inside 10' vs Iceland, claim lost) |
 | `goal_before_halftime` | 85% | Favorite usually scores before HT |
 | `match_2plus_cards` | 70% | Fewer fouls when one team dominates |
 | `team_scores_first` (favorite) | 80% | Heavy favorite usually opens scoring |
@@ -58,8 +58,8 @@ For the match's archetype, estimate each claim's probability:
 #### Clear Favorite Match (e.g., England vs Panama)
 | Claim | Estimated Probability | Reasoning |
 |-------|----------------------|-----------|
-| `match_2plus_goals` | 80% | Likely 2-3 goals |
-| `no_goal_first_10` | 85% | Standard early-match pattern |
+| `match_2plus_goals` | 80% | Likely 2-3 goals — still the default green |
+| `no_goal_first_10` | 72% | Below green standards — favorite may start fast |
 | `team_scores_first` (favorite) | 65% | Usually scores first but not always |
 | `match_2plus_yellow_cards` | 75% | Moderate physicality |
 | `match_over_2_5_goals` | 55% | Possible but not certain |
@@ -67,7 +67,7 @@ For the match's archetype, estimate each claim's probability:
 #### Competitive Match (e.g., Netherlands vs Japan)
 | Claim | Estimated Probability | Reasoning |
 |-------|----------------------|-----------|
-| `no_goal_first_10` | 88% | Both teams cautious early |
+| `no_goal_first_10` | 80% | Both teams cautious early — only archetype where this claim is acceptable |
 | `match_2plus_cards` | 85% | More tackling in even matches |
 | `match_2plus_yellow_cards` | 75% | Physical contest |
 | `match_2plus_goals` | 70% | Usually some goals but could be cagey |
@@ -99,3 +99,4 @@ The math clearly shows: **Green claims with high probability dominate Red claims
 3. **Narrative bias**: "This team is due for an upset" is not a probability-based argument
 4. **Sunk cost**: Past losses don't affect today's optimal claim — always pick based on today's probabilities
 5. **Gambling fallacy**: "I've been conservative, time to go big" — your strategy should be standings-based, not feelings-based
+6. **"Safe claim" fallacy**: No claim is safe independent of the matchup. `no_goal_first_10` looks safe on paper but collapses to ~60% when a heavy favorite plays — match every claim to the archetype tables above before calling it Green-worthy (we lost our warmup stake to this exact mistake)

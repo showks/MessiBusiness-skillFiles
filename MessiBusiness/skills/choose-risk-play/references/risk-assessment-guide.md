@@ -36,9 +36,9 @@ These historical averages inform claim probability estimates:
 - Matches with 2+ goals: ~75%
 - Matches with 3+ goals: ~52%
 - Matches with both teams scoring: ~50%
-- Goals in first 10 minutes: ~15% of matches
+- Goals in first 10 minutes: ~20-25% of matches — and noticeably HIGHER when a heavy favorite plays (they press from kickoff; warmup evidence: Argentina scored inside 10' vs Iceland). `no_goal_first_10` is ~75-80% at best, not 85-90%.
 - Goals before halftime: ~75% of matches
-- Goals in stoppage time: ~18% of matches
+- Goals in stoppage time: ~22-25% of matches (modern stoppage periods are long) — `no_goal_stoppage_time` is ~75%, not 80%+
 
 ### Cards
 - Average cards per match: 3.8 (2022 World Cup)
@@ -62,9 +62,11 @@ These historical averages inform claim probability estimates:
 
 ### Profile A: Heavy Favorite vs Weak Team
 Best claims:
-1. GREEN `match_2plus_goals` (~85% probability)
+1. GREEN `match_2plus_goals` (~85% probability) — the default for this profile
 2. YELLOW `team_scores_first` for the favorite (~70%)
 3. RED `team_wins_by_3plus` if mismatch is extreme (~20-25%)
+
+**NEVER take `no_goal_first_10` in this profile** — heavy favorites often score early (~60-65% claim probability here, far below Green standards). This exact mistake cost us 8 points in the warmup (Argentina scored inside 10' vs Iceland; the final was 3-0, so `match_2plus_goals` would have won).
 
 ### Profile B: Two Strong Teams
 Best claims:
@@ -74,15 +76,16 @@ Best claims:
 
 ### Profile C: Two Evenly Matched Mid-Tier Teams
 Best claims:
-1. GREEN `no_goal_first_10` (~85%)
-2. GREEN `no_goal_stoppage_time` (~82%)
-3. YELLOW `match_2plus_yellow_cards` (~70%)
+1. GREEN `match_2plus_cards` (~80% — even matches are scrappy)
+2. GREEN `no_goal_first_10` (~78% — acceptable here, and ONLY here)
+3. GREEN `no_goal_stoppage_time` (~75%)
+4. YELLOW `match_2plus_yellow_cards` (~70%)
 
 ### Profile D: Knockout Match (when applicable)
 Best claims:
 1. GREEN `match_2plus_goals` (~70% — knockout matches tend to be cagier)
 2. RED `match_goes_to_extra_time` (~25% — if teams are evenly matched)
-3. GREEN `no_goal_first_10` (~88% — knockout matches start cautiously)
+3. GREEN `no_goal_first_10` (~80% — knockout matches start cautiously, but still avoid when one side is a heavy favorite)
 
 ## Adaptive Risk Table
 
@@ -108,3 +111,9 @@ Starting at 50 points, hitting a Yellow claim each day:
 - Day 10: ~155 points
 
 The compounding effect makes consistent correct risk plays extremely powerful over a full tournament. This is why claim probability matters more than claim size.
+
+## Calibration Log (update after every matchday)
+
+| Date | Claim taken | Match context | Result | Lesson |
+|------|-------------|---------------|--------|--------|
+| 2026-06-10 (warmup) | `no_goal_first_10` (Green, 8-pt stake) | Argentina (heavy favorite) vs Iceland | LOST -8 — Argentina scored inside 10' | Never `no_goal_first_10` against a heavy favorite. Final was 3-0 and the other match 1-2, so `match_2plus_goals` would have won on either match — that's what the +8 teams above us took. |

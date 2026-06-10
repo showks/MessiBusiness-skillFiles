@@ -17,6 +17,18 @@ Select exactly 11 players from `game-board/players.json` to maximize expected fa
 
 ## Step 2: Research Predicted Lineups (MOST IMPORTANT STEP)
 
+### Step 2.0: Superstar pool scan (do this FIRST, before any web search)
+
+Scan the eligible players from Step 1 for global superstars using the **Global Superstar Shortlist** and the **One Verified Star Per Team** table in `references/world-cup-2026-knowledge.md` (web-verified list covering all 48 teams). The pool is ground truth: **if a superstar is in `players.json` and eligible today, they are playing in this tournament** — never write them off based on prior narratives, age, or assumed retirement. In the warmup we left an eligible Messi out of the XI; it was our costliest error and we finished rank 21.
+
+**Mandatory injury check for every eligible superstar** before locking them in:
+1. Check the Injury Watchlist in `references/world-cup-2026-knowledge.md` (snapshot 2026-06-10), then run a FRESH search: `"[Player name] injury"` and `"[Team name] team news"` — fresh news overrides the snapshot.
+2. **Reports state he will MISS this match** (ruled out, not in squad, suspended) → remove him from auto-pick AND from XI consideration entirely. An injured superstar scores 0.
+3. **Doubtful / game-time decision / "racing to be fit"** → NOT an auto-pick. Select him only if 2+ fresh sources or the confirmed/predicted lineup show him starting; otherwise treat as Tier 4 (risky).
+4. **Fit and expected to start** → locked-in pick.
+
+Confirm each surviving superstar's starting status in the lineup research below and treat confirmed/likely starters among them as locked-in picks.
+
 For EACH match today, search multiple prediction sites for expected starting XIs:
 
 ### Primary lineup sources (search all of these):
@@ -82,6 +94,7 @@ Using research findings, estimate expected fantasy points for each player:
 - Wing-back on dominant team (crosses into box): **+1 expected**
 
 ### Clean Sheet Potential (DEF and GK only)
+The clean-sheet bonus only pays if the player stays on the pitch 60+ minutes — combine this with Substitution Risk below.
 - DEF on team with 70%+ win probability AND under 1.5 goals conceded expected: **+3 expected**
 - DEF on moderate favorite: **+1.5 expected**
 - DEF on underdog or in close match: **+0 expected** (don't count on it)
@@ -95,6 +108,12 @@ Using research findings, estimate expected fantasy points for each player:
 - Player with 0.3+ yellow cards per game in prior stats: **-0.5**
 - Defensive midfielder in a high-stakes match: **-0.3**
 - Player from a team known for physical play: **-0.2**
+
+### Substitution Risk (subtract from expected value)
+An early sub forfeits both the 60-minute bonus AND the clean-sheet bonus (warmup evidence: 4 of our Argentina starters were withdrawn before 60' and returned +2 each despite a 3-0 clean sheet).
+- Veteran (30+) center-back or holding midfielder on a heavy favorite: **-1.5** (rested once the game is safe)
+- Squad player likely to be a planned half-time/tactical sub: **-1**
+- Goalkeepers, first-choice fullbacks, the main striker, and the team's talisman: **no deduction** (full-90 profiles)
 
 ## Step 5: Build Position Pools (DO THIS BEFORE PICKING)
 
@@ -143,8 +162,8 @@ fantasy_xi   = selected_GK + selected_DEF + selected_MID + selected_FWD
 
 You may swap a default top pick for a lower one in the SAME pool for strategic reasons (e.g., a confirmed starter over a benched star, or diversifying across matches). Swapping within a pool never changes the position counts, so the formation stays legal.
 
-- **Diversification**: Prefer spreading picks across 2-3 matches. Swap within a pool to achieve this — never by changing a position quota.
-- **Archetypes to favor within pools**: penalty takers on favored teams (+6 goal upside), set-piece specialists, attacking full-backs (90 min + clean sheet + assist upside), the main #9 striker.
+- **Diversification**: Prefer spreading picks across 2-3 matches, but ONLY with players from the favored side of each match. Never roster an underdog's player just to cover a match — underdog starters cap at ~+4 with no upside (our Iceland/Congo picks in the warmup wasted 3 slots). Swap within a pool to achieve this — never by changing a position quota.
+- **Archetypes to favor within pools**: eligible superstars from Step 2.0 (always first), penalty takers on favored teams (+6 goal upside), set-piece specialists, attacking full-backs (90 min + clean sheet + assist upside), the main #9 striker.
 
 ## Step 7: Mandatory Recount and Repair Loop
 

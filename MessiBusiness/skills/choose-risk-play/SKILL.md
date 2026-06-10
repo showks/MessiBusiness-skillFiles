@@ -60,13 +60,13 @@ For EACH match today, search prediction websites for specific probabilities:
 
 | Claim | When Prediction Sites Say... | Base Probability |
 |-------|------------------------------|-----------------|
-| `no_goal_first_10` | Any match — goals in first 10 min are rare | ~85% |
-| `match_2plus_goals` | Forebet over 1.5 > 70%, OR strong attacking teams | ~78% |
-| `no_goal_stoppage_time` | Any match — stoppage time goals are uncommon | ~80% |
-| `goal_before_halftime` | Forebet over 0.5 first half > 65%, attacking match | ~75% |
-| `match_2plus_cards` | Physical teams, competitive match, or Forebet cards prediction | ~80% |
+| `match_2plus_goals` | Default — ~75% of WC matches have 2+ goals; near-lock when a strong favorite plays (Forebet over 1.5 > 70%) | ~78% (~85%+ with a heavy favorite) |
+| `goal_before_halftime` | Forebet over 0.5 first half > 65%, attacking match or heavy favorite | ~75% |
+| `match_2plus_cards` | Physical teams, competitive match, or Forebet cards prediction | ~78% |
+| `no_goal_first_10` | ONLY in even, cagey matchups. **NEVER with a heavy favorite** — favorites press from kickoff (warmup: Argentina scored inside 10' vs Iceland and this claim lost our 8-pt stake) | ~75% even match; ~60-65% with heavy favorite |
+| `no_goal_stoppage_time` | Cagey/defensive matches only — modern stoppage time is long, making this riskier than it looks | ~75% |
 
-**Default GREEN pick**: `no_goal_first_10` — highest base probability, works on any match.
+**Default GREEN pick**: `match_2plus_goals` on the match with the strongest favorite. Calibration: both warmup matches (3-0 and 1-2) hit it, and the teams that took it gained +8 while our `no_goal_first_10` lost -8.
 
 ### YELLOW CLAIMS (25% stake) — Target 60%+ win probability
 
@@ -104,7 +104,9 @@ For EACH match today, search prediction websites for specific probabilities:
 
 IF risk appetite is Conservative:
     → Find the GREEN claim with highest probability from research
-    → Prefer: no_goal_first_10 (~85%) or match_2plus_cards (~80%)
+    → Prefer: match_2plus_goals on the strongest favorite's match (~85%),
+      or match_2plus_cards (~78%) in a physical competitive match
+    → Only use no_goal_first_10 when ALL matches are even/cagey — never against a heavy favorite
     → Pick the match with the clearest prediction consensus
 
 ELSE IF risk appetite is Moderate:
@@ -133,7 +135,7 @@ SPECIAL CASE: Your team has very few points (< 15):
    - `claim_id`: The selected claim
    - `match_id`: From `matches.json` — must be a valid match for today
    - `team_id` (if required): Must be home or away team in the match
-   - `player_id` (if required): Must be in `players.json` AND belong to a team in the match
+   - `player_id` (if required): Must be in `players.json` AND belong to a team in the match — AND injury-cleared: never stake a player-based claim (`player_scores`, `player_scores_2plus`) on anyone flagged OUT or DOUBTFUL by the Injury Watchlist in `../pick-fantasy-xi/references/world-cup-2026-knowledge.md` or by a fresh `"[player] injury"` search; he must be in the confirmed/predicted starting lineup
    - `home_score` / `away_score` (if exact_score): Integers matching the predicted scoreline
 
 3. **NEVER include**: `bet_points`, `stake`, `stake_percent` — the tournament calculates these.
@@ -148,7 +150,7 @@ Before finalizing:
 - [ ] `player_id` (if used) is in `players.json` and belongs to a team in that match
 - [ ] No prohibited fields (bet_points, stake, stake_percent) included
 
-If validation fails, fall back to: `{ "claim_id": "no_goal_first_10", "match_id": "[any valid match_id]" }`
+If validation fails, fall back to: `{ "claim_id": "match_2plus_goals", "match_id": "[the match with the strongest favorite]" }`
 
 ## Step 7: Safety Net
 
@@ -159,6 +161,6 @@ If ALL of the following are true:
 
 Then choose ONE of:
 - `risk_play: null` (skip entirely — no risk, no reward)
-- `{ "claim_id": "no_goal_first_10", "match_id": "[first match_id from matches.json]" }` (safest possible Green)
+- `{ "claim_id": "match_2plus_goals", "match_id": "[the match whose teams look most mismatched on the board data]" }` (safest blind Green — ~75% baseline, higher in mismatches; never blind-pick no_goal_first_10, it lost our warmup stake)
 
 A wrong claim loses points. A skipped claim loses nothing. When truly blind, skipping is better than guessing on Yellow/Red.
