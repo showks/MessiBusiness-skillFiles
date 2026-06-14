@@ -63,8 +63,9 @@ Record for each match:
 
 **Then verify each flagged superstar's fitness** — the Injury Watchlist in that same knowledge file is the starting point (snapshot 2026-06-10), but always run fresh searches and let fresh news win:
 - Search: `"[Player name] injury"` and `"[Team name] team news World Cup 2026"`
-- Record one status per superstar: **OUT** (stated to miss this match / not in squad / suspended — exclude from all picks), **DOUBTFUL** (fitness race or game-time decision — pick only with a confirmed predicted-lineup start), or **FIT** (auto-pick candidate)
-- Known watch items as of 2026-06-10: Neymar (calf, uncertain for June 13 vs Morocco), Yamal (targeted ~June 15), Romero/Molina (Argentina), Kudus (Ghana), Merino (Spain), Jose Gimenez (Uruguay)
+- Record one status per superstar: **OUT** (stated to miss this match / not in squad / suspended — exclude from all picks), **DOUBTFUL** (fitness race, game-time decision, or on the Watchlist), or **FIT** (auto-pick candidate)
+- **DOUBTFUL is fail-closed.** Flag it as "EXCLUDE unless a fresh predicted/confirmed starting XI names him in the starting 11." Pool eligibility does NOT upgrade a DOUBTFUL to FIT — a player is listed as eligible whether or not he actually starts. If you cannot find a fresh lineup, or your search failed / returned the wrong fixture, leave the status as DOUBTFUL→EXCLUDE and tell the XI skill to use the next healthy player. Never resolve an injury doubt by falling back to "he's in the pool."
+- Known watch items as of 2026-06-10: **Neymar (`player_id` 276 — calf, uncertain for June 13 vs Morocco; we were advised against him, treat as HARD EXCLUDE unless a fresh XI confirms a start)**, Yamal (targeted ~June 15), Romero/Molina (Argentina), Kudus (Ghana), Merino (Spain), Jose Gimenez (Uruguay)
 
 For the star players on each team:
 - Search: `"[Player name] World Cup 2026 form"` for current fitness and form

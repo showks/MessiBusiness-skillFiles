@@ -128,8 +128,8 @@ RULED OUT of the tournament (never pick; if such a name appears eligible in play
 - USA: Johnny Cardoso (ankle surgery), Patrick Agyemang (Achilles)
 - Australia: Lewis Miller (Achilles) | Canada: Marcelo Flores (ACL) | Scotland: Billy Gilmour (knee)
 
-DOUBTFUL (never auto-pick; select ONLY if fresh predicted lineups confirm a start):
-- **Brazil: NEYMAR (calf strain — explicitly uncertain for the June 13 opener vs Morocco)**
+DOUBTFUL (FAIL CLOSED — exclude by default; pick ONLY if a fresh predicted/confirmed starting XI names the player in the starting 11. No confirmation, failed research, or wrong-fixture results = exclude):
+- **Brazil: NEYMAR (`player_id` 276; calf strain — explicitly uncertain for the June 13 opener vs Morocco). HARD EXCLUDE for 2026-06-13 unless a fresh predicted XI names him starting — we were advised against him and the agent must not pick him on eligibility alone.**
 - Argentina: Cristian Romero (MCL), Nahuel Molina (thigh)
 - Spain: Mikel Merino (foot) | England: Tino Livramento (thigh)
 - Ghana: Mohammed Kudus (hamstring) | Uruguay: Jose Gimenez (ankle)
@@ -141,7 +141,12 @@ RETURNING / DECLARED FIT (pick freely once a start is confirmed):
 - Croatia: Luka Modric (cheekbone) | England: Reece James (hamstring)
 - Canada: Alphonso Davies | USA: Chris Richards | Japan: Wataru Endo | Algeria: Luca Zidane
 
-Sim-vs-news note: real-world reports flagged a Messi hamstring concern before the tournament, yet he was eligible and Argentina rolled 3-0 in the 2026-06-10 warmup. The simulation follows actual availability — trust `players.json` eligibility plus FRESH lineup research over stale injury headlines, in both directions.
+Sim-vs-news note (read carefully — this was misread once and cost us a wasted slot on Neymar): eligibility resolves only ONE kind of doubt — a **narrative / stale write-off** (age, retirement, "he's past it"). Messi was written off by narrative, was eligible, and rolled 3-0; that is the lesson. It does **NOT** resolve a **specific current injury report**. The correct rule is asymmetric, not "trust eligibility in both directions":
+
+- **Narrative write-off + eligible** → PICK (eligibility wins; e.g. Messi, Ronaldo, Modric).
+- **Current injury/fitness flag (Watchlist DOUBTFUL/OUT or a fresh "injury"/"team news" hit)** → eligibility does NOT clear it. Require a fresh predicted/confirmed starting XI that names the player in the starting 11. **No confirmation — including when research fails or covers the wrong fixture — means EXCLUDE.** Default is fail-closed.
+
+Players are listed as eligible before kickoff whether or not they actually start, so "eligible" and "injured, scores 0" are fully compatible. When unsure, take the next healthy player in the same pool — the board always has a fit alternative.
 
 ## World Cup Historical Patterns
 

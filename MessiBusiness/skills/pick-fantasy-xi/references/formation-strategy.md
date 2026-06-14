@@ -1,5 +1,7 @@
 # Formation Strategy Guide
 
+> **Formations here are only bucket counts (GK/DEF/MID/FWD), never field roles.** `players.json` has no LW/ST/RW/CB/DM — just the four buckets, with hard limits of 1 GK, 3–5 DEF, 3–5 MID, 1–3 FWD. "3 FWD" means *the three highest-expected-points players in the FWD pool*, even if all three are strikers or two play for the same team. Stacking same-archetype players is encouraged when they score the most: e.g. five creative midfielders and no holding mid, or three pure goalscorers up top. Never hold a high-EV player out of the XI for the sake of role variety. The formation is just whichever legal bucket split puts your highest-EV 11 on the sheet — pick the points, not the shape.
+
 ## Formation Decision Tree
 
 Use this decision tree to select the optimal formation for each matchday:

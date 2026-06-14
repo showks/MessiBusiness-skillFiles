@@ -52,7 +52,7 @@
 ### Tier 0: Automatic Picks (check BEFORE any scoring)
 - Scan today's eligible pool in `players.json` for global superstars using the web-verified Global Superstar Shortlist and the all-48-teams star table in `world-cup-2026-knowledge.md`. The pool is ground truth: if a superstar is eligible, they are playing in this tournament — never assume retirement or absence based on narratives.
 - Any such superstar expected to start is an automatic pick. Leaving an eligible Messi out of the warmup XI was our costliest error of the entire matchday.
-- **Injury gate**: before auto-picking, check the Injury Watchlist in `world-cup-2026-knowledge.md` AND run a fresh `"[player] injury"` search. Stated to MISS the match → drop from the XI entirely (an absent superstar scores 0). Doubtful/game-time decision → not an auto-pick; demote to Tier 4 unless fresh predicted lineups confirm he starts.
+- **Injury gate (fail-closed)**: before auto-picking, check the Injury Watchlist in `world-cup-2026-knowledge.md` AND run a fresh `"[player] injury"` search. Stated to MISS the match → drop from the XI entirely (an absent superstar scores 0). Doubtful / game-time decision / on the Watchlist → **EXCLUDE by default**; pick ONLY if a fresh predicted/confirmed starting XI names him in the starting 11. Pool eligibility does not clear an injury flag, and failed/wrong-fixture research counts as no confirmation → exclude and use the next healthy player in the same pool. (Neymar, `player_id` 276, is a hard exclude for 2026-06-13 unless his start is confirmed.)
 
 ### Tier 1: Must-Pick (Expected 6+ points)
 - Star forward for heavy favorite, confirmed starter

@@ -19,13 +19,18 @@ Select exactly 11 players from `game-board/players.json` to maximize expected fa
 
 ### Step 2.0: Superstar pool scan (do this FIRST, before any web search)
 
-Scan the eligible players from Step 1 for global superstars using the **Global Superstar Shortlist** and the **One Verified Star Per Team** table in `references/world-cup-2026-knowledge.md` (web-verified list covering all 48 teams). The pool is ground truth: **if a superstar is in `players.json` and eligible today, they are playing in this tournament** — never write them off based on prior narratives, age, or assumed retirement. In the warmup we left an eligible Messi out of the XI; it was our costliest error and we finished rank 21.
+Scan the eligible players from Step 1 for global superstars using the **Global Superstar Shortlist** and the **One Verified Star Per Team** table in `references/world-cup-2026-knowledge.md` (web-verified list covering all 48 teams). The pool is ground truth **for narrative write-offs only**: **if a superstar is in `players.json` and eligible today, they are playing in this tournament** — never write them off based on prior narratives, age, or assumed retirement. In the warmup we left an eligible Messi out of the XI; it was our costliest error and we finished rank 21.
 
-**Mandatory injury check for every eligible superstar** before locking them in:
+**Pool eligibility is NOT a fitness clearance.** Eligibility rebuts *narrative* doubts (age, retirement, "successor generation"). It does NOT rebut a *specific, current injury or fitness report*. A name on the Injury Watchlist, or any name with a fresh "injury" / "team news" hit, stays gated by the check below no matter how eligible the pool says they are. Players appear in `players.json` before kickoff regardless of whether they will actually start, so an injured star can be both "eligible" and a guaranteed 0.
+
+**Mandatory injury check for every eligible superstar — FAIL CLOSED (default = exclude):**
 1. Check the Injury Watchlist in `references/world-cup-2026-knowledge.md` (snapshot 2026-06-10), then run a FRESH search: `"[Player name] injury"` and `"[Team name] team news"` — fresh news overrides the snapshot.
 2. **Reports state he will MISS this match** (ruled out, not in squad, suspended) → remove him from auto-pick AND from XI consideration entirely. An injured superstar scores 0.
-3. **Doubtful / game-time decision / "racing to be fit"** → NOT an auto-pick. Select him only if 2+ fresh sources or the confirmed/predicted lineup show him starting; otherwise treat as Tier 4 (risky).
-4. **Fit and expected to start** → locked-in pick.
+3. **Doubtful / game-time decision / "racing to be fit" / on the Watchlist** → **EXCLUDE by default.** Pick him ONLY if a fresh **predicted or confirmed starting XI explicitly names him in the starting 11** (a generic "he's eligible" or "could feature" is not enough). One such source is the bar; if sources conflict, exclude.
+4. **Research is missing, inconclusive, failed, returned the wrong fixture, or you simply could not confirm a start** → treat the flag as UNRESOLVED → **EXCLUDE.** Do not fall back to "he's in the pool so pick him." Skip to the next-best **healthy** player in the same pool. There is never a reason to gamble a slot on an unconfirmed injury doubt: the board has 49 FWDs, 67 MIDs, 70 DEFs, 25 GKs — a fit replacement always exists, and skipping one doubtful star costs nothing.
+5. **Fit and expected to start** (no flag, or Watchlist says RETURNING/FIT with a confirmed start) → locked-in pick.
+
+> **Hard exclusions for 2026-06-13 (Brazil vs Morocco):** Neymar (`player_id` 276) is DOUBTFUL (calf) and was explicitly advised against — DO NOT pick him unless a fresh predicted XI names him in Brazil's starting 11. Rodrygo, Eder Militao, and Estevao are ruled OUT. When in doubt about any Brazil attacker, prefer the confirmed-fit ones (e.g. Vinicius Junior, Raphinha).
 
 Confirm each surviving superstar's starting status in the lineup research below and treat confirmed/likely starters among them as locked-in picks.
 
@@ -118,6 +123,11 @@ An early sub forfeits both the 60-minute bonus AND the clean-sheet bonus (warmup
 ## Step 5: Build Position Pools (DO THIS BEFORE PICKING)
 
 Formation errors score 0. To make an illegal formation **structurally impossible**, you must select by filling position quotas, never by picking "best players" and hoping the counts work out.
+
+> **There are only four buckets — no field roles.** `players.json` classifies every player as exactly one of `GK`, `DEF`, `MID`, or `FWD`. There is NO sub-role (no LW / ST / RW / CB / DM / "second striker"), and the rules never ask for one. The ONLY roster constraints are: exactly **1 GK**, **3–5 DEF**, **3–5 MID**, **1–3 FWD**, total 11. So:
+> - Within a bucket, rank purely by expected points and take the top N. **You may and often should stack same-archetype players** — three out-and-out strikers in the FWD slots, two No. 9s from different matches, five attacking/creative midfielders with zero holding mids. Whatever scores the most points.
+> - Do **not** reserve a slot for "variety" (e.g. don't keep a winger out to fit a target-man, or a goalscorer out to fit a playmaker). Two great strikers beat one great striker plus one mediocre winger.
+> - Pick the bucket split (the formation) that **maximizes total expected points** subject only to the 1 / 3–5 / 3–5 / 1–3 limits. If your best XI is six attackers and three defenders, use 1-3-4-3 or 1-3-5-2; if defenders are the value, load DEF. Let the points decide the shape, not a preferred shape decide the points.
 
 First, sort EVERY eligible player into exactly one of four pools, using the `position` field from `players.json` as the only authority. Do not infer position from web research — a player's pool is whatever `players.json` says (`GK`, `DEF`, `MID`, or `FWD`).
 
