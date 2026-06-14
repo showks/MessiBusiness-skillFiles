@@ -60,4 +60,4 @@ For the tournament winner prediction:
 
 ## Step 6: Output
 
-Submit bracket picks using the exact IDs from `bracket.json`. Follow the format specified in the bracket rules. If any pick is uncertain, still submit your best guess — partial bracket submissions may score partial points.
+Submit bracket picks using the exact IDs from `bracket.json`. Follow the format specified in the bracket rules. A bracket pick is a *prediction*, so making a reasoned forecast here is expected — not fabrication (which means inventing source data you did not read). If any pick is uncertain, still submit your best evidence-based pick from the valid `bracket.json` IDs rather than leaving it blank — partial bracket submissions may score partial points.

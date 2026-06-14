@@ -52,7 +52,7 @@ These three errors cost us the warmup. They are corrected throughout the skills 
 
 **Validity before optimality.** An invalid Fantasy XI scores 0. Always validate formation and player IDs before finalising.
 
-**Research before intuition.** Every player pick and risk claim must be backed by at least one prediction site or confirmed lineup source. Do not guess.
+**Evidence before invention — never fabricate.** Every player pick and risk claim must be backed by *evidence*: a prediction site, a confirmed/predicted lineup, OR the provided board and package data (`players.json` eligibility and `prior_world_cup_record`, `standings-before.json`, and the web-verified knowledge base). Web research is the *preferred* evidence, but the shipped board/package data is valid ground truth — using it is not guessing. What is forbidden is inventing or guessing data you did not actually read: never state a lineup, statistic, probability, or scoreline that you did not read from a reachable source or a provided file, and never attribute invented data to a source you could not access. Web research is preferred but never a precondition for a valid submission — see **Research Availability & No-Fabrication Policy** below.
 
 **Adaptive risk.** Adjust claim aggressiveness based on standings rank — conservative when ahead, aggressive when behind. The skills explain exactly how.
 
@@ -79,3 +79,18 @@ Use these domains when the skills instruct you to search the web:
 | Low | inside.fifa.com | Official tournament data |
 
 If a domain is unreachable, skip it and use whatever is available. Never fabricate data from a source you could not access.
+
+## Research Availability & No-Fabrication Policy
+
+Web research is *preferred* evidence, but its absence is never a license to invent, and a valid submission never depends on the network being up. Two hard rules govern every skill:
+
+1. **Never fabricate or guess source data.** Do not state a lineup, starter, statistic, probability, scoreline, or prediction you did not actually read from a reachable source or a provided file. If a domain is unreachable or a search returns nothing useful, skip it — do not "fill in" what it might have said and do not attribute invented data to it. Inventing research is a failure even if the resulting pick scores well.
+
+2. **When external research is unavailable** (no network, all domains unreachable, or searches return nothing useful), do NOT stop and do NOT guess — fall back to the provided ground-truth data, which is legitimate evidence, not fabrication:
+   - `game-board/players.json` — who is actually eligible today, plus each player's real `prior_world_cup_record` (starts, minutes, goals, assists, cards).
+   - `game-board/standings-before.json`, `teams.json`, `matches.json` — standings context and the valid IDs for the submission.
+   - `skills/pick-fantasy-xi/references/world-cup-2026-knowledge.md` — web-verified star tiers and the Injury Watchlist (apply the injury gate **fail-closed**: with no network you cannot confirm a doubtful player's start, so exclude him).
+
+   Build the Fantasy XI by ranking each position pool on this on-board evidence and picking confirmed-eligible, healthy, likely full-90 players. For the risk play, use the choose-risk-play **Step 7 safety net** — skip (`risk_play: null`) or a blind Green (`match_2plus_goals`) on the board's clearest mismatch. Lower your confidence and prefer conservative claims, but never guess a probability.
+
+A legal submission built entirely from the provided board/package data with no web access is valid and expected when offline. The only failure mode is invented "research."

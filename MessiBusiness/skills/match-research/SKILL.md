@@ -113,6 +113,17 @@ When multiple prediction sources are available:
 - If sources disagree, treat as medium confidence and lean toward the source with the best track record (Forebet mathematical model > pundit opinion)
 - Never treat any single prediction as certain — even heavy favorites lose in World Cups
 
+## When Research Is Unavailable — Never Fabricate
+
+If a search fails, a domain is unreachable, results cover the wrong fixture, or there is no network at all, **do not invent the missing intelligence**. Mark each field you could not verify as `UNKNOWN — no source` in the research summary rather than guessing a lineup, probability, or scoreline, and lower that match's confidence to "no external data."
+
+When external research is wholly unavailable, fall back to the provided ground-truth files — this is allowed and is not fabrication:
+- `players.json` eligibility and `prior_world_cup_record` for who is in the pool and their real prior stats.
+- The star tiers and Injury Watchlist in `../pick-fantasy-xi/references/world-cup-2026-knowledge.md` — apply the injury gate **fail-closed** (no confirmation of a doubtful player's start = exclude; never resolve a doubt with "he's in the pool").
+- `standings-before.json`, `teams.json`, `matches.json` for context and valid IDs.
+
+Pass these board-derived findings forward with explicit low confidence so the XI and risk skills lean conservative. A correct "we could not confirm X" beats a fabricated lineup.
+
 ## Step 5: Pass Findings Forward
 
 Use the compiled research summaries to inform the `pick-fantasy-xi` and `choose-risk-play` skills. The research should directly feed into:

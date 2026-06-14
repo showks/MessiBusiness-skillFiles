@@ -55,6 +55,15 @@ For EACH match today, search multiple prediction sites for expected starting XIs
 - Named in 1 source = **Possible starter** — only pick if high upside
 - Not named anywhere = **Bench player** — avoid entirely
 
+### If web research is unavailable (no network / all sources unreachable / no useful results)
+
+Do NOT fabricate lineups or starters, and do NOT abandon the task — fall back to the provided ground-truth data, which is valid evidence, not a guess:
+- Rank players within each position pool using `players.json` eligibility and `prior_world_cup_record` (starts, minutes, goals, assists per prior World Cup). High prior-WC minutes ≈ a reliable starter; a strong goal/assist rate ≈ attacking upside.
+- Use the web-verified star tiers and the Injury Watchlist in `references/world-cup-2026-knowledge.md`. Keep the injury gate **FAIL-CLOSED**: with no network you cannot confirm a doubtful player's start, so every Watchlist OUT/DOUBTFUL name (Neymar 276 included) is excluded.
+- Only call a player a "starter" on real evidence (strong prior-WC minutes or knowledge-base star status) — never assert a start you did not read. Prefer healthy, eligible, full-90 profiles and lower your confidence accordingly.
+
+A legal XI built from board data is valid and expected when offline; an XI built from invented research is a failure even if it scores. Then continue to Step 3 (use board/knowledge-base context in place of the missing web data).
+
 ## Step 3: Research Match Predictions and Statistics
 
 For each match, gather probability data from prediction platforms:

@@ -164,3 +164,5 @@ Then choose ONE of:
 - `{ "claim_id": "match_2plus_goals", "match_id": "[the match whose teams look most mismatched on the board data]" }` (safest blind Green — ~75% baseline, higher in mismatches; never blind-pick no_goal_first_10, it lost our warmup stake)
 
 A wrong claim loses points. A skipped claim loses nothing. When truly blind, skipping is better than guessing on Yellow/Red.
+
+**Never fabricate a probability.** Do not invent a Forebet/ESPN figure or a percentage to justify a claim — if you did not read it from a reachable source, you do not have it. Base the blind Green only on what the board data plainly shows (e.g., a top-tier team vs a debutant). A Yellow or Red claim requires real read evidence; absent it, take the blind Green or skip. This is the choose-risk-play half of the package-wide No-Fabrication Policy in the team `README.md`.
