@@ -1,6 +1,6 @@
 ---
 name: pick-fantasy-xi
-description: Research-driven Fantasy XI selection using prediction websites, expected lineup data, xG statistics, and scoring optimization to pick 11 players that maximize expected fantasy points.
+description: Research-driven Fantasy XI selection using prediction markets, predicted-lineup data, and scoring optimization to pick 11 players that maximize expected fantasy points.
 ---
 
 # Fantasy XI Selection Skill
@@ -36,12 +36,12 @@ Confirm each surviving superstar's starting status in the lineup research below 
 
 For EACH match today, search multiple prediction sites for expected starting XIs:
 
-### Primary lineup sources (search all of these):
-- ESPN: `"[Team A] vs [Team B] predicted lineup World Cup 2026"` on www.espn.com
-- BBC: `"[Team A] v [Team B] team news World Cup 2026"` on www.bbc.com
-- Sportskeeda: `"[Team A] vs [Team B] predicted lineup"` on www.sportskeeda.com
-- Sky Sports: `"[Team A] vs [Team B] starting XI"` on www.skysports.com
-- WhoScored: `"[Team name] predicted lineup"` on www.whoscored.com
+### Core lineup sources (use these two — fall to a backup only if one is down):
+- The Guardian: `"[Team A] v [Team B] team news World Cup 2026"` on www.theguardian.com
+- Sports Mole: `"[Team A] vs [Team B] predicted lineup"` on www.sportsmole.co.uk
+- Backup ONLY if a core source is unreachable: Fox Sports (www.foxsports.com) or CBS Sports (www.cbssports.com)
+
+Note the 9 AM Mountain runtime: confirmed XIs are often not out yet, so "predicted lineup" articles (including ones published overnight) are your main evidence — see README "Runtime & Timing."
 
 ### What to extract:
 - Which players are predicted to start (cross-reference across sources)
@@ -49,11 +49,13 @@ For EACH match today, search multiple prediction sites for expected starting XIs
 - Any injuries, suspensions, or rotation expected
 - Who takes penalties and free kicks for each team
 
-### Starter confidence levels:
-- Named in 3+ sources = **Confirmed starter** — must-pick candidate
-- Named in 2 sources = **Likely starter** — strong pick
-- Named in 1 source = **Possible starter** — only pick if high upside
-- Not named anywhere = **Bench player** — avoid entirely
+### Starter confidence levels (calibrated to the two core lineup sources):
+- In BOTH The Guardian's and Sports Mole's predicted XI = **Confirmed starter** — must-pick candidate
+- In ONE core source, not contradicted by the other = **Likely starter** — strong pick
+- Only mentioned as a doubt / rotation risk = **Possible starter** — only pick if high upside
+- Not named as a starter in either = **Bench player** — avoid entirely
+
+With just two lineup sources, "both agree" is your confirmed bar. If one core source is down, a backup outlet's XI can stand in for it.
 
 ### If web research is unavailable (no network / all sources unreachable / no useful results)
 
@@ -68,17 +70,15 @@ A legal XI built from board data is valid and expected when offline; an XI built
 
 For each match, gather probability data from prediction platforms:
 
+### Check the prediction markets (cleanest read on the favorite):
+- Search `"[Team A] [Team B] Kalshi"` / `"[Team A] [Team B] Polymarket"` — each side's implied win probability and any total-goals market.
+
 ### Search Forebet for mathematical predictions:
 - Search: `"[Team A] vs [Team B]" site:forebet.com`
 - Extract: 1X2 probabilities, over/under 2.5, BTTS probability, predicted score
 
-### Search for xG and advanced stats:
-- Search: `"[Team name] xG"` on fbref.com or understat.com
-- Extract: Team xG per game, defensive xGA, key player xG
-
-### Search for expert predictions:
-- Search: `"[Team A] vs [Team B] prediction"` on footballpredictions.com
-- Search: `"[Team A] vs [Team B] preview"` on ESPN, BBC, Sportskeeda
+### One expert read (from the core preview):
+- Take the predicted scoreline and favorite from The Guardian's preview. Skip footballpredictions, xG, and ratings sites — out of the core list and rarely decisive.
 
 ### Synthesize into match profiles:
 For each match, determine:
@@ -204,6 +204,7 @@ Check ALL of these. Every one must be true:
 - `1 <= count_FWD <= 3`
 - All 11 `player_id` values are unique (no duplicates)
 - Every `player_id` exists in `players.json` and lists today's `matchday_id` in `eligible_matchday_ids`
+- Every `player_id` belongs to a team in a fixture that has its own research block from `match-research` (Match Coverage Contract). If you want a player from a fixture you did not research, go research that fixture first — do not pick from a blank.
 
 ### If ANY check fails, repair and recount:
 - **count_GK == 2** → remove the weaker GK; add the best unused player from whichever outfield pool is below its minimum.

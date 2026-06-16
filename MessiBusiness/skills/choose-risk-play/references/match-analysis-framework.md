@@ -30,10 +30,10 @@ These factors can shift predictions significantly:
 - Matchday 3 (final group match): desperate teams take risks, more goals and cards
 - Dead rubber (both teams qualified): rotated squads, experimental lineups
 
-**Head-to-Head History**
+**Head-to-Head History** (minor signal — the market and Forebet already price it in)
 - Some matchups are historically high-scoring (e.g., Brazil vs Argentina)
 - Some matchups are historically cagey (e.g., France vs Germany)
-- Check Wikipedia for the last 5 head-to-head results
+- If a core preview (The Guardian) mentions the H2H pattern, note it; don't go hunting dedicated H2H sites for daily picks
 
 **Referee Tendencies**
 - If the referee is announced, search for their card statistics

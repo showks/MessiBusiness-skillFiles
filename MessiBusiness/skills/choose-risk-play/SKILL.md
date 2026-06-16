@@ -31,28 +31,28 @@ Select the optimal risk play claim by combining prediction site data with adapti
 
 For EACH match today, search prediction websites for specific probabilities:
 
-### Search Forebet (highest priority for risk play):
+### Check the prediction markets (ground truth for odds — do this first):
+- Search: `"[Team A] [Team B] Kalshi"` and `"[Team A] [Team B] Polymarket"`, or the World Cup market pages on kalshi.com / polymarket.com
+- A market share price IS the implied probability (a "Yes" at $0.62 ≈ 62%). Read off each side's win probability and any total-goals markets.
+- This is the most reliable read on which match has the strongest favorite — exactly what the default Green claim targets.
+
+### Search Forebet (mathematical model — highest-priority non-market source):
 - Search: `"[Team A] vs [Team B]" site:forebet.com`
 - Extract: 1X2 percentages, over/under 2.5 probability, BTTS probability, predicted score
-- Forebet uses a mathematical model with historical data — treat these as the most reliable probabilities
+- Forebet uses a mathematical model with historical data — treat these as reliable, and cross-check against the market price above; if they diverge sharply, lower confidence.
 
-### Search ESPN/BBC for expert predictions:
-- Search: `"[Team A] vs [Team B] prediction" site:espn.com`
-- Search: `"[Team A] vs [Team B] prediction" site:bbc.com`
-- Extract: Expert predicted scores, key match narrative
-
-### Search Sportskeeda for detailed predictions:
-- Search: `"[Team A] vs [Team B] prediction World Cup 2026" site:sportskeeda.com`
-- Extract: Predicted scoreline, predicted goalscorers, match analysis
+### One expert read (core preview):
+- Take the predicted scoreline and key match narrative from The Guardian's preview (`"[Team A] v [Team B] World Cup 2026" site:theguardian.com`).
+- Backup ONLY if The Guardian is unreachable: CBS Sports or Fox Sports.
 
 ### Search for card predictions:
 - Search: `"[Team A] vs [Team B] cards prediction"` on available prediction sites
 - Check if Forebet provides card predictions for the match
 
-### Cross-reference predictions:
-- If 3+ sources predict the same outcome → **High confidence** (80%+)
-- If 2 sources agree → **Moderate confidence** (60-70%)
-- If sources disagree → **Low confidence** (below 60%)
+### Cross-reference predictions (three independent core signals: market, Forebet, Guardian):
+- Market + Forebet + The Guardian all point the same way → **High confidence** (80%+)
+- Market and Forebet agree (preview silent or unavailable) → **Moderate-High confidence** (~70%)
+- Only one signal available, or market and Forebet disagree → **Low confidence** (below 60%) — lean Green or skip
 
 ## Step 3: Map Predictions to Claims
 
@@ -146,6 +146,7 @@ Before finalizing:
 - [ ] `claim_id` exists in `claim-catalog.json`
 - [ ] All required fields for that claim are present
 - [ ] `match_id` is from today's `matches.json`
+- [ ] `match_id` has its own research block in the `match-research` summary (Match Coverage Contract — never stake the Risk Play on a fixture you did not research; if the strongest favorite is in an under-researched match, go research it first)
 - [ ] `team_id` (if used) is home_team_id or away_team_id in that match
 - [ ] `player_id` (if used) is in `players.json` and belongs to a team in that match
 - [ ] No prohibited fields (bet_points, stake, stake_percent) included
@@ -165,4 +166,4 @@ Then choose ONE of:
 
 A wrong claim loses points. A skipped claim loses nothing. When truly blind, skipping is better than guessing on Yellow/Red.
 
-**Never fabricate a probability.** Do not invent a Forebet/ESPN figure or a percentage to justify a claim — if you did not read it from a reachable source, you do not have it. Base the blind Green only on what the board data plainly shows (e.g., a top-tier team vs a debutant). A Yellow or Red claim requires real read evidence; absent it, take the blind Green or skip. This is the choose-risk-play half of the package-wide No-Fabrication Policy in the team `README.md`.
+**Never fabricate a probability.** Do not invent a Forebet figure, a Kalshi/Polymarket market price, or any percentage to justify a claim — if you did not read it from a reachable source, you do not have it. Base the blind Green only on what the board data plainly shows (e.g., a top-tier team vs a debutant). A Yellow or Red claim requires real read evidence; absent it, take the blind Green or skip. This is the choose-risk-play half of the package-wide No-Fabrication Policy in the team `README.md`.

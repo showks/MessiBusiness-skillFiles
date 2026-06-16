@@ -17,7 +17,7 @@ This skill activates ONLY when bracket play is open. Check if `game-board/bracke
 
 For each knockout matchup in the bracket:
 
-1. Search ESPN and BBC for "[Team A] vs [Team B] World Cup 2026 prediction" and "World Cup 2026 bracket predictions."
+1. Check the prediction markets (kalshi.com / polymarket.com) for tournament-winner and per-tie odds, and search CBS Sports / Fox Sports / The Guardian for "[Team A] vs [Team B] World Cup 2026 prediction" and "World Cup 2026 bracket predictions." (ESPN/BBC removed — not reachable from the sandbox.)
 2. Search FIFA.com for current FIFA rankings and tournament group stage results.
 3. Search Wikipedia for historical World Cup knockout round performance for each team.
 

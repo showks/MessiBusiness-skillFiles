@@ -6,11 +6,11 @@ This guide explains how to convert raw prediction-site data into actionable fant
 
 ### From Predicted Lineups → Starter Identification
 
-When a prediction site shows a predicted lineup:
-- A player listed in 3+ predicted lineups across different sites = **confirmed starter** (very high confidence)
-- A player listed in 2 predicted lineups = **likely starter** (high confidence)
-- A player listed in 1 predicted lineup = **possible starter** (moderate confidence)
-- A player not listed in any predicted lineup = **unlikely starter** (low confidence, avoid)
+With two core lineup sources (The Guardian + Sports Mole):
+- In BOTH predicted XIs = **confirmed starter** (very high confidence)
+- In ONE, not contradicted by the other = **likely starter** (high confidence)
+- Only a doubt / rotation mention = **possible starter** (moderate confidence)
+- In neither predicted XI = **unlikely starter** (avoid). If one core source is down, a backup outlet's XI can stand in for it.
 
 ### From Match Predictions → Player Targeting
 
@@ -23,23 +23,7 @@ When a prediction site shows a predicted lineup:
 | BTTS likely (60%+) | Don't rely on clean sheets, focus on goal/assist potential |
 | BTTS unlikely (below 40%) | Heavy clean sheet play on the favored team's defense |
 
-### From Player Ratings → Individual Selection
-
-| WhoScored/SofaScore Rating | Interpretation |
-|----------------------------|----------------|
-| 7.5+ average | Elite performer, must-pick if starting |
-| 7.0-7.4 average | Strong performer, good pick |
-| 6.5-6.9 average | Average, pick only if starter on strong team |
-| Below 6.5 | Underperformer, avoid unless no alternatives |
-
-### From xG Data → Goal Probability
-
-| Player's xG per 90 min | Goal Likelihood per Match |
-|------------------------|--------------------------|
-| 0.60+ | Very high (~50%+ chance of scoring) |
-| 0.40-0.59 | High (~35% chance) |
-| 0.25-0.39 | Moderate (~20% chance) |
-| Below 0.25 | Low (~10% chance) |
+> Player-ratings and xG tables were removed along with the WhoScored/SofaScore/FBref sources. With the tight-core list, judge individual attackers by: is he a **confirmed starter** (above), is he his team's **penalty/set-piece taker**, and does the **market/Forebet** rate his team a strong favorite (more team goals → more chances for him). That ordering captures almost all of the fantasy signal those stat sites provided.
 
 ## Converting Predictions to Risk Play Selections
 
@@ -56,6 +40,19 @@ This is the most direct and valuable mapping:
 | Away win | > 70% | `team_scores_first` (away team) | Yellow (25%) |
 | Predicted score 3-0, 4-0, etc. | High confidence | `team_wins_by_3plus` | Red (35%) |
 | Predicted exact score | Very high confidence | `exact_score` | Red (35%) |
+
+### Prediction Market (Kalshi / Polymarket) → Claim Mapping
+
+Market prices are real-money implied probabilities — treat them as the single most trustworthy odds source, and as the tie-breaker when Forebet and pundits disagree.
+
+| Market reads | Implied | Best Risk Claim | Claim Level |
+|--------------|---------|-----------------|-------------|
+| One side's win contract > ~75% | Heavy favorite | `match_2plus_goals` on that match (default Green) | Green (15%) |
+| One side's win contract > ~70% | Strong favorite | `team_scores_first` (that team) | Yellow (25%) |
+| "Over 2.5 goals" / total-goals market priced high | Goals expected | `match_over_2_5_goals` | Yellow (25%) |
+| Lopsided market (favorite > ~85%, e.g. top team vs debutant) | Mismatch | `team_wins_by_3plus` | Red (35%) |
+
+To find the strongest-favorite match for the default Green claim, rank today's fixtures by the favorite's market win price and take the highest. If markets are unavailable for a fixture, fall back to Forebet's 1X2.
 
 ### Expert Consensus → Confidence Level
 
@@ -88,26 +85,24 @@ Only use `exact_score` (Red, 35% stake) when:
 ### The Consensus Method
 
 For each potential pick (player or risk claim), score it:
-- +3 if ESPN recommends/predicts it
-- +3 if BBC recommends/predicts it
-- +3 if Forebet mathematical model supports it
-- +2 if Sportskeeda predicts it
-- +2 if Sky Sports predicts it
-- +1 if WhoScored data supports it
-- +1 if historical Wikipedia data supports it
+- +4 if the Kalshi/Polymarket market price supports it (real-money odds — the strongest single signal)
+- +3 if Forebet's model supports it
+- +2 if The Guardian predicts/supports it
+- +2 if Sports Mole predicts/supports it
+- +1 if a backup outlet (Fox Sports / CBS Sports) supports it
 
-Total consensus score:
-- 10+: Very strong pick, high confidence
-- 7-9: Strong pick
-- 4-6: Moderate pick
-- Below 4: Weak pick, look for alternatives
+Total consensus score (max 12):
+- 8+: Very strong pick, high confidence
+- 5-7: Strong pick
+- 3-4: Moderate pick
+- Below 3: Weak pick, look for alternatives
 
 ### Handling Conflicting Predictions
 
 When sources disagree:
-1. Weight mathematical models (Forebet, xG data) over pundit opinions
-2. Weight sites with lineup info (ESPN, BBC) over those without
-3. Weight recent information (today's articles) over older predictions
+1. Weight prediction-market odds (Kalshi/Polymarket) and the Forebet model over pundit opinions
+2. Weight sites with lineup info (The Guardian, Sports Mole) over those without
+3. Weight recent information (today's articles, including overnight US posts) over older predictions
 4. When truly uncertain, default to the conservative option (pick confirmed starters, take Green claims)
 
 ## Time-Critical Lineup Information
@@ -118,7 +113,9 @@ In the hours before kickoff, lineup predictions become much more accurate:
 - 1-2 hours before: Confirmed lineups often leak, ~90% accuracy
 - Official announcement: 100% accurate (usually 1 hour before kickoff)
 
-Since the skill runs before the daily cutoff (9 PM Mountain Time), you may be researching before official lineups are announced. Focus on:
+**The agent runs at ~09:00 Mountain Time** (the submission does not lock until 21:00 Mountain, but you only get the one 9 AM pass). At 9 AM, official lineups for that day's matches are almost never out yet — they leak ~1 hour before kickoff. So you are researching *predicted*, not confirmed, lineups. Focus on:
+- Prediction-market odds (Kalshi/Polymarket) and Forebet probabilities — these are available around the clock
+- Overnight-published previews from US outlets (a piece posted "8 hours ago" the night before IS available at 9 AM)
 - Manager press conference quotes about team selection
 - Training reports (who trained, who was absent)
 - Beat reporter predictions (local journalists often know best)

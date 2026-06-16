@@ -40,6 +40,14 @@ Any other split scores **0 for the entire matchday**. Build the XI by filling po
 
 **These four buckets are the ONLY position rule — there are no field roles.** `players.json` has no LW/ST/RW/CB/DM; do not invent role slots. You need exactly 1 GK and any legal count of DEF/MID/FWD within the bounds above. Within a bucket, take the highest-expected-points players and **stack freely** — three pure strikers, two No. 9s from different matches, five attacking midfielders with no holding mid are all fine if they score the most. Never bench a high-value player for "positional variety." Choose the bucket split (formation) that maximizes total expected points; let the points pick the shape.
 
+## Match Coverage Contract — Research Every Fixture, Pick Only From Researched Ones
+
+The board, not the web, defines today's matches. A recent run built its entire Fantasy XI and Risk Play around **Argentina vs Algeria** while the written research never once mentioned that fixture — the agent had let a web search ("matches taking place today") enumerate the schedule, it returned only a partial set, and Argentina was silently dropped from the research yet kept in the picks. That decoupling is banned. Two binding rules:
+
+1. **`game-board/matches.json` is the complete and authoritative fixture list.** Count its entries (`N`) and write out all `N` matches by name as the first thing you do. Web search is ONLY for researching those specific fixtures — never for discovering which matches exist. If a search surfaces fewer or different fixtures than the board, the board wins: go research the missing ones by name. Your research summary must contain exactly `N` MATCH blocks, one per board fixture (a block may read "no external data — board-only" but it may never be absent).
+
+2. **You may not pick a player or stake the Risk Play on any match that does not have its own completed research block.** Before finalizing, cross-check: every `player_id` in the Fantasy XI, and the `risk_play.match_id`, must belong to a fixture that appears in your research summary. If you intend to pick Messi from Argentina vs Algeria, that fixture must be enumerated and researched first. A pick from an un-researched match is a process failure even if it scores.
+
 ## Warmup Post-Mortem — Binding Corrections (from 2026-06-10, rank 21)
 
 These three errors cost us the warmup. They are corrected throughout the skills and are binding:
@@ -56,29 +64,31 @@ These three errors cost us the warmup. They are corrected throughout the skills 
 
 **Adaptive risk.** Adjust claim aggressiveness based on standings rank — conservative when ahead, aggressive when behind. The skills explain exactly how.
 
-## Web Research Domains
+## Runtime & Timing — Read This Before Researching
 
-Use these domains when the skills instruct you to search the web:
+- **The hosted agent runs at ~09:00 America/Denver (Mountain Time), and the sandbox clock is Mountain Time.** The submission does not lock until **21:00 Mountain** (`submission_locks_at` in `matchday.json`) — but you only get this one 9 AM pass, so research with the information that exists at 9 AM.
+- At 9 AM Mountain, **confirmed** starting XIs for that day's matches are usually NOT out yet (they leak ~1 hour before kickoff). Rely on **predicted** lineups, **overnight-published previews** (US outlets post late evening / early morning, so a piece "published 8 hours ago" IS available to you), and **prediction-market odds**.
+- Favor sources that publish on US time and are reachable from a US sandbox. ESPN and BBC were **removed** from the list below: in live runs ESPN returned only the bare schedule (no previews/lineups) and BBC article pages were not publicly accessible from the sandbox. Do not spend research budget retrying them.
 
-| Priority | Domain | Best For |
-|----------|--------|----------|
-| High | www.espn.com | Predicted lineups, match previews, odds |
-| High | www.bbc.com | Team news, confirmed absences, previews |
-| High | www.forebet.com | Mathematical probabilities (1X2, over/under, BTTS) |
-| High | www.sportskeeda.com | Predicted lineups, detailed match predictions |
-| Medium | www.skysports.com | Expert tips, predicted XIs |
-| Medium | www.whoscored.com | Player ratings, tactical analysis |
-| Medium | www.sofascore.com | Player form, head-to-head stats |
-| Medium | fbref.com | xG data, advanced player statistics |
-| Medium | understat.com | Expected goals and shot quality |
-| Medium | footballpredictions.com | World Cup match tips |
-| Low | en.wikipedia.org | Head-to-head history, tournament records |
-| Low | www.fifa.com | Official squad lists, FIFA rankings |
-| Low | www.reuters.com | Breaking injury and squad news |
-| Low | apnews.com | AP match previews |
-| Low | inside.fifa.com | Official tournament data |
+## Web Research Domains — Tight Core (use these, not a long list)
 
-If a domain is unreachable, skip it and use whatever is available. Never fabricate data from a source you could not access.
+The source list is deliberately short. Most preview outlets just echo the same wire, so a long list buys redundant "consensus," not signal — and it tempts you to spray one shallow search per site instead of fully covering every fixture. Consult the **core** sources every run; the **backups** exist only as insurance if a core site is unreachable that morning. Each line does a job the others cannot.
+
+| Tier | Domain | Its job (nothing else does it as well) |
+|------|--------|----------------------------------------|
+| Core | kalshi.com + polymarket.com | **Odds / strongest favorite** — real-money implied win probabilities (ground truth) |
+| Core | www.forebet.com | **Claim probabilities** — over/under 2.5, BTTS, predicted/exact score; maps directly to the risk-claim table |
+| Core | www.theguardian.com | **Predicted lineups + team news / injuries** — reliably reachable journalism |
+| Core | www.sportsmole.co.uk | **Predicted starting XIs** for each side |
+| Backup | www.foxsports.com, www.cbssports.com | US-time previews / predicted XIs — use ONLY if a core lineup source is down |
+
+For **bracket-play only** (knockout rounds), also consult www.fifa.com (FIFA rankings) and en.wikipedia.org (knockout history). These are not for daily picks.
+
+Why these four jobs and no more: **markets** tell you who's favored, **Forebet** gives the specific over/under-BTTS-score numbers the risk claims map to, and **The Guardian + Sports Mole** are your only lineup sources — markets and Forebet never tell you who *starts*, and the fail-closed injury gate depends on a real predicted XI. Player ratings/xG sites (WhoScored, SofaScore, FBref) were dropped: they rarely change a pick and are redundant with the above.
+
+**Prediction markets are ground truth for odds.** A market share price is the implied probability: a "Yes" contract at $0.62 ≈ 62%. Use them to (a) pick the strongest-favorite match for the Risk Play, and (b) sanity-check Forebet — if a market and Forebet diverge sharply, lower confidence.
+
+If a core domain is unreachable, fall to the backup, then to the offline policy below — never invent its content. **Only list a source in your research summary if you actually read content from it** — never name a site as the source of a figure you did not retrieve from it. Never fabricate data from a source you could not access.
 
 ## Research Availability & No-Fabrication Policy
 
