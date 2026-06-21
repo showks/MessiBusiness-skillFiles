@@ -115,38 +115,20 @@ Elite GKs: Thibaut Courtois (BEL), Alisson (BRA), Emiliano Martinez (ARG — but
 | L | Ghana | Antoine Semenyo | FWD | Man City revelation; Kudus doubtful |
 | L | Panama | Adalberto Carrasquilla | MID | Debut-squad engine |
 
-### Injury Watchlist (ESPN injury tracker, snapshot 2026-06-10)
+### Injury & Availability Protocol — Verify a Fresh Starting XI Every Time (no static list)
 
-**This snapshot ages fast — run fresh injury searches before every submission; fresh news overrides this list.**
+There is **no reliable static availability list** this deep into the tournament: statuses change daily, and a player can be "eligible" in `players.json` yet not start (injured, rested, rotated) and score **0**. We have lost points to exactly this on most matchdays — famous defenders and forwards who did not start, plus one game where a stale "fit" note green-lit a player who was actually out and another where a stale "doubtful" name was picked anyway. A static list is the disease, not the cure.
 
-RULED OUT of the tournament (never pick; if such a name appears eligible in players.json, re-verify with fresh search before trusting either source):
-- Brazil: Rodrygo (ACL), Eder Militao (hamstring surgery), Estevao (hamstring, left off squad)
-- Netherlands: Matthijs de Ligt (back), Jurrien Timber (groin), Xavi Simons (ACL), Jerdy Schouten (ACL)
-- Germany: Serge Gnabry (adductor), Marc-Andre ter Stegen (thigh), Lennart Karl (thigh)
-- France: Hugo Ekitike (Achilles) | Spain: Fermin Lopez (metatarsal)
-- Japan: Kaoru Mitoma (hamstring), Takumi Minamino (ACL)
-- USA: Johnny Cardoso (ankle surgery), Patrick Agyemang (Achilles)
-- Australia: Lewis Miller (Achilles) | Canada: Marcelo Flores (ACL) | Scotland: Billy Gilmour (knee)
+**Binding rule (covers EVERY player — superstar or squad filler): pick a player ONLY if a fresh predicted/confirmed starting XI for HIS actual match — from The Guardian or Sports Mole — names him in the starting 11.** Reputation, fame, prior caps, or mere eligibility is NOT evidence that he starts today. If his name is not in a fresh predicted XI, or research failed / covered the wrong fixture, **EXCLUDE him and take the next player you CAN confirm starts.** This single check prevents both failure modes at once: it stops you starting an injured/benched star, and it stops you trusting a stale "he's fit" note.
 
-DOUBTFUL (FAIL CLOSED — exclude by default; pick ONLY if a fresh predicted/confirmed starting XI names the player in the starting 11. No confirmation, failed research, or wrong-fixture results = exclude):
-- **Brazil: NEYMAR (`player_id` 276; calf strain — explicitly uncertain for the June 13 opener vs Morocco). HARD EXCLUDE for 2026-06-13 unless a fresh predicted XI names him starting — we were advised against him and the agent must not pick him on eligibility alone.**
-- Argentina: Cristian Romero (MCL), Nahuel Molina (thigh)
-- Spain: Mikel Merino (foot) | England: Tino Livramento (thigh)
-- Ghana: Mohammed Kudus (hamstring) | Uruguay: Jose Gimenez (ankle)
-- Australia: Aiden O'Neill (ankle), Patrick Yazbek (quad)
+**Eligibility resolves only a narrative write-off** (age, retirement, "he's past it" — the Messi lesson: written off, eligible, hat-trick → pick). It does NOT clear a current fitness or rotation doubt. The rule is asymmetric — never "trust eligibility both ways." "Eligible" and "injured/benched, scores 0" are fully compatible.
 
-RETURNING / DECLARED FIT (pick freely once a start is confirmed):
-- Spain: Lamine Yamal (hamstring, ready ~June 15) | France: William Saliba (back, declared ready)
-- Morocco: Achraf Hakimi (hamstring, expected fit) | Turkiye: Arda Guler (hamstring, on track)
-- Croatia: Luka Modric (cheekbone) | England: Reece James (hamstring)
-- Canada: Alphonso Davies | USA: Chris Richards | Japan: Wataru Endo | Algeria: Luca Zidane
+**Season-ending injuries — stable hard-excludes** (reported OUT for the whole tournament on 2026-06-10; treat as still out. If one appears eligible, that is the pool listing the registered squad, NOT a fitness clearance — still require a fresh starting XI before ever trusting it):
+- Brazil: Rodrygo, Eder Militao, Estevao · Netherlands: de Ligt, Timber, Xavi Simons, Schouten
+- Germany: Gnabry, ter Stegen, Lennart Karl · France: Ekitike · Spain: Fermin Lopez
+- Japan: Mitoma, Minamino · USA: Cardoso, Agyemang · Australia: Lewis Miller · Canada: Marcelo Flores · Scotland: Gilmour
 
-Sim-vs-news note (read carefully — this was misread once and cost us a wasted slot on Neymar): eligibility resolves only ONE kind of doubt — a **narrative / stale write-off** (age, retirement, "he's past it"). Messi was written off by narrative, was eligible, and rolled 3-0; that is the lesson. It does **NOT** resolve a **specific current injury report**. The correct rule is asymmetric, not "trust eligibility in both directions":
-
-- **Narrative write-off + eligible** → PICK (eligibility wins; e.g. Messi, Ronaldo, Modric).
-- **Current injury/fitness flag (Watchlist DOUBTFUL/OUT or a fresh "injury"/"team news" hit)** → eligibility does NOT clear it. Require a fresh predicted/confirmed starting XI that names the player in the starting 11. **No confirmation — including when research fails or covers the wrong fixture — means EXCLUDE.** Default is fail-closed.
-
-Players are listed as eligible before kickoff whether or not they actually start, so "eligible" and "injured, scores 0" are fully compatible. When unsure, take the next healthy player in the same pool — the board always has a fit alternative.
+**Everyone else has NO pre-set status here.** Do not assume fit, do not assume out — verify each pick against a fresh predicted XI. (Neymar in particular keeps getting auto-picked on reputation while not starting, for 0 points. He is not special: no fresh XI naming him a starter = exclude. The same goes for any big name whose start you cannot confirm.)
 
 ## World Cup Historical Patterns
 

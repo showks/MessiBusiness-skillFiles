@@ -12,9 +12,11 @@ Before making any picks, research every match on today's board using prediction 
 1. Read `game-board/matches.json` to list all fixtures. **This file is the complete and authoritative schedule.** Count its entries — call it `N`. You will research exactly `N` matches and your summary will end with exactly `N` MATCH blocks.
 2. Read `game-board/teams.json` to get team names and countries.
 3. For each match, note: `match_id`, home team name, away team name, kickoff time. Write out the full numbered roster (1..`N`) of fixtures before searching anything.
-4. **Web search NEVER decides which matches exist.** Do not ask the web "what matches are on today" and trust the answer — search engines return partial or wrong schedules. If your searches surface fewer or different fixtures than `matches.json`, the board wins: research the missing fixtures by name. A recent run let a web search enumerate the day and silently dropped Argentina vs Algeria from the research while still picking from it — never again.
+4. **Web search NEVER decides which matches exist, and you research ONLY the board's fixtures.** Do not ask the web "what matches are on today" — search engines return partial or wrong schedules. Research each of the `N` board fixtures BY NAME (e.g. `"[home] vs [away] World Cup 2026"`). Do NOT research, mention, or chase any team that is not on today's board, and do NOT spend a single line establishing which teams are NOT playing — that is wasted effort that has polluted past runs (one summary burned most of its length on four teams that weren't playing that day while barely covering the four that were). If a search drags in an off-board team or a different date's match, discard it.
 
 Remember the clock: the agent runs at ~09:00 Mountain Time, so confirmed XIs for today's matches are usually not out yet. Lean on predicted lineups, overnight-published US previews, and prediction-market odds (see README "Runtime & Timing").
+
+**Sources: core list only.** Use only the core sources (Kalshi/Polymarket, Forebet, The Guardian, Sports Mole; Fox/CBS as backup). Do NOT cite or rely on "how to watch / live stream / TV schedule" listicles, random AI-predictor blogs, or Reddit — they have handed us wrong dates and noise. If a core source has nothing for a fixture, mark it board-only; never substitute a junk source or invent coverage.
 
 ## Step 2: Research Each Match (Do ALL of these for EACH match)
 
@@ -59,11 +61,11 @@ Skip dedicated ratings/xG sites (WhoScored, SofaScore, FBref); they rarely chang
 
 **First, scan `game-board/players.json` for global superstars in today's eligible pool**, using the web-verified Global Superstar Shortlist and all-48-teams star table in `../pick-fantasy-xi/references/world-cup-2026-knowledge.md`. The pool is ground truth: any superstar listed as eligible IS at the tournament and pickable — never write one off from memory or pre-tournament narratives. Flag every eligible superstar prominently in the research summary so the XI skill cannot miss them (we missed an eligible Messi in the warmup and paid for it).
 
-**Then verify each flagged superstar's fitness** — the Injury Watchlist in that same knowledge file is the starting point (snapshot 2026-06-10), but always run fresh searches and let fresh news win:
+**Then verify each flagged superstar's fitness** via the **Injury & Availability Protocol** in that same knowledge file. There is no current static status list — run fresh searches and decide from a fresh predicted XI:
 - Search: `"[Player name] injury"` and `"[Team name] team news World Cup 2026"`
-- Record one status per superstar: **OUT** (stated to miss this match / not in squad / suspended — exclude from all picks), **DOUBTFUL** (fitness race, game-time decision, or on the Watchlist), or **FIT** (auto-pick candidate)
-- **DOUBTFUL is fail-closed.** Flag it as "EXCLUDE unless a fresh predicted/confirmed starting XI names him in the starting 11." Pool eligibility does NOT upgrade a DOUBTFUL to FIT — a player is listed as eligible whether or not he actually starts. If you cannot find a fresh lineup, or your search failed / returned the wrong fixture, leave the status as DOUBTFUL→EXCLUDE and tell the XI skill to use the next healthy player. Never resolve an injury doubt by falling back to "he's in the pool."
-- Known watch items as of 2026-06-10: **Neymar (`player_id` 276 — calf, uncertain for June 13 vs Morocco; we were advised against him, treat as HARD EXCLUDE unless a fresh XI confirms a start)**, Yamal (targeted ~June 15), Romero/Molina (Argentina), Kudus (Ghana), Merino (Spain), Jose Gimenez (Uruguay)
+- Record one status per superstar: **OUT** (stated to miss this match / not in squad / suspended, or a season-ending hard-exclude — drop from all picks), **DOUBTFUL** (any fitness or rotation doubt), or **STARTING** (named in a fresh predicted XI for this match — only then an auto-pick).
+- **OUT and DOUBTFUL are both fail-closed: pick ONLY if a fresh predicted/confirmed XI names him in the starting 11.** Pool eligibility never upgrades a player to STARTING — he is listed whether or not he plays. If you cannot find a fresh lineup, or research failed / returned the wrong fixture, leave him EXCLUDED and tell the XI skill to use the next confirmed starter. Never resolve a doubt with "he's in the pool."
+- Apply this to every big name, no exceptions: reputation is not a team sheet. Stars including Neymar keep getting wrongly picked while not starting (0 points) — only a fresh XI naming the player a starter clears anyone. Do not rely on a remembered injury list; verify per match.
 
 For the star players on each team:
 - Search: `"[Player name] World Cup 2026 form"` for current fitness and form
@@ -73,7 +75,7 @@ For the star players on each team:
 
 ## Step 3: Compile a Research Summary — One Block Per Board Fixture
 
-Produce **exactly `N` MATCH blocks — one for every fixture in `matches.json`, none skipped.** Even a match you could find no external data on gets a block (fill the fields with `UNKNOWN — no source` and mark it board-only). Do not let a fixture fall out of the summary just because research was thin; that is how the Argentina vs Algeria fixture got dropped while still being picked from.
+Produce **exactly `N` MATCH blocks — one for every fixture in `matches.json`, none skipped.** Even a match you could find no external data on gets a block (fill the fields with `UNKNOWN — no source` and mark it board-only). Do not let a fixture fall out of the summary just because research was thin; that is how a fixture once got dropped from the research while still being picked from.
 
 For each match, compile these findings into a structured assessment:
 
@@ -119,7 +121,7 @@ If a search fails, a domain is unreachable, results cover the wrong fixture, or 
 
 When external research is wholly unavailable, fall back to the provided ground-truth files — this is allowed and is not fabrication:
 - `players.json` eligibility and `prior_world_cup_record` for who is in the pool and their real prior stats.
-- The star tiers and Injury Watchlist in `../pick-fantasy-xi/references/world-cup-2026-knowledge.md` — apply the injury gate **fail-closed** (no confirmation of a doubtful player's start = exclude; never resolve a doubt with "he's in the pool").
+- The star tiers and Injury & Availability Protocol in `../pick-fantasy-xi/references/world-cup-2026-knowledge.md` — apply the gate **fail-closed** (no confirmation of a player's start = exclude; never resolve a doubt with "he's in the pool").
 - `standings-before.json`, `teams.json`, `matches.json` for context and valid IDs.
 
 Pass these board-derived findings forward with explicit low confidence so the XI and risk skills lean conservative. A correct "we could not confirm X" beats a fabricated lineup.

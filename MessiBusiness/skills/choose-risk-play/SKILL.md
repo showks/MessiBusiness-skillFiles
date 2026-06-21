@@ -135,7 +135,7 @@ SPECIAL CASE: Your team has very few points (< 15):
    - `claim_id`: The selected claim
    - `match_id`: From `matches.json` — must be a valid match for today
    - `team_id` (if required): Must be home or away team in the match
-   - `player_id` (if required): Must be in `players.json` AND belong to a team in the match — AND injury-cleared: never stake a player-based claim (`player_scores`, `player_scores_2plus`) on anyone flagged OUT or DOUBTFUL by the Injury Watchlist in `../pick-fantasy-xi/references/world-cup-2026-knowledge.md` or by a fresh `"[player] injury"` search; he must be in the confirmed/predicted starting lineup
+   - `player_id` (if required): Must be in `players.json` AND belong to a team in the match — AND injury-cleared: never stake a player-based claim (`player_scores`, `player_scores_2plus`) on anyone whose start is unconfirmed. Apply the Injury & Availability Protocol in `../pick-fantasy-xi/references/world-cup-2026-knowledge.md` plus a fresh `"[player] injury"` search; he must be named in the fresh confirmed/predicted starting lineup
    - `home_score` / `away_score` (if exact_score): Integers matching the predicted scoreline
 
 3. **NEVER include**: `bet_points`, `stake`, `stake_percent` — the tournament calculates these.
