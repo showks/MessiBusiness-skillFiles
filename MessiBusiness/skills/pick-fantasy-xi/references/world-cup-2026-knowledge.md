@@ -9,33 +9,8 @@
 
 ## Ground Rules for Using This File
 
-- The daily eligible pool in `players.json` ALWAYS outranks this knowledge base. If a player appears in the pool, they are at the tournament and pickable — never assume retirement or absence from any narrative, including this file. Scan the pool for elite names (Messi, Ronaldo, Mbappe, Vinicius, Yamal, Kane, Haaland, Bellingham, ...) before doing anything else.
-- Verified simulation results outrank pre-tournament odds and pundit narratives. Update the log below after every matchday.
-
-## Verified Simulation Results Log
-
-### Warmup matchday, 2026-06-10 (we finished rank 21 — corrections derived from this)
-- **Argentina 3-0 Iceland** — Argentina scored inside the first 10 minutes (our `no_goal_first_10` claim lost its 8-pt stake) and kept a clean sheet. V. Barco scored and saw a yellow. G. Rulli started in goal and played 60+. F. Medina and A. Giay played 60+ and banked clean-sheet points (+8 each). Otamendi, Lisandro Martinez, Lo Celso, and Palacios all started but were subbed BEFORE 60 minutes — only +2 each, no minutes bonus, no clean-sheet bonus.
-- **Congo DR 1-2 Chile** — away win. Our Congo forward pick (Wissa) returned only the +2 start bonus.
-- **Lionel Messi was eligible and we left him out** — the single biggest selection error of the warmup.
-- Both matches finished with 2+ total goals (`match_2plus_goals` would have won on either).
-
-## All 12 Groups
-
-| Group | Team 1 (Pot 1) | Team 2 | Team 3 | Team 4 |
-|-------|---------------|--------|--------|--------|
-| A | Mexico | South Korea | South Africa | Czechia |
-| B | Canada | Switzerland | Qatar | Bosnia-Herzegovina |
-| C | Brazil | Morocco | Haiti | Scotland |
-| D | United States | Paraguay | Australia | Turkiye |
-| E | Germany | Curacao | Ivory Coast | Ecuador |
-| F | Netherlands | Japan | Sweden | Tunisia |
-| G | Belgium | Egypt | Iran | New Zealand |
-| H | Spain | Cape Verde | Saudi Arabia | Uruguay |
-| I | France | Senegal | Iraq | Norway |
-| J | Argentina | Algeria | Austria | Jordan |
-| K | Portugal | DR Congo | Uzbekistan | Colombia |
-| L | England | Croatia | Ghana | Panama |
+- The daily eligible pool in `players.json` ALWAYS outranks this knowledge base. If a player appears in the pool, they are at the tournament and pickable — never assume retirement or absence from any narrative, including this file. Scan the pool for elite names before doing anything else.
+- **This file is for star-player reference only. It never tells you which matches are on today or who plays whom — fixtures and opponents come ONLY from `matches.json` (resolve each row's two team_ids via `teams.json`).** Do not infer a matchup from any group or standings information.
 
 ## Tournament Favorites (Pre-Tournament Odds)
 
@@ -45,24 +20,24 @@
 | 2 | France | +475 | Mbappe-led attack, World Cup pedigree, massive squad depth |
 | 3 | England | +650 | Golden generation, strong Premier League core |
 | 4 | Brazil | +850 | Attacking firepower, Vinicius Jr + Neymar + Raphinha |
-| 5 | Argentina | +900 | Defending World Cup champion, Messi STILL leading the line (verified in warmup) plus elite young core |
+| 5 | Argentina | +900 | Defending World Cup champion, Messi plus an elite young core |
 | 6 | Portugal | +1000 | Ronaldo farewell tour, strong squad depth |
 | 7 | Germany | +1400 | Home-region advantage (nearby fans), tactical discipline |
 | 8 | Netherlands | +1600 | Total football tradition, balanced squad |
 
-## Key Star Players (WEB-VERIFIED 2026-06-10 — re-verify fitness before every submission)
+## Key Star Players (re-verify fitness and a fresh starting XI before every submission)
 
-Sources: ESPN "World Cup Rank" top 50, FOX Sports top 100 + one-player-per-team guide for all 48 squads, Opta/Northeastern data analysis, ESPN injury tracker. Data analysts rate **Messi, Olise, and Vinicius Junior** as the tournament's top three overall threats; top goalscorer candidates are **Kane, Haaland, and Mbappe**. Messi (38, sixth World Cup) and Ronaldo (41) are both CONFIRMED at the tournament.
+Use this only to spot stars in today's pool — never as proof anyone starts. Top overall threats include Messi, Olise, and Vinicius Junior; top goalscorer candidates include Kane, Haaland, and Mbappe.
 
 ### Global Superstar Shortlist (scan players.json for these names every matchday)
 
-ESPN top 15: Ousmane Dembele (FRA), Lamine Yamal (ESP), Michael Olise (FRA), Harry Kane (ENG), Bruno Fernandes (POR), Pedri (ESP), William Saliba (FRA), Raphinha (BRA), Bukayo Saka (ENG), Martin Odegaard (NOR), Erling Haaland (NOR), Vinicius Junior (BRA), Jude Bellingham (ENG), Kylian Mbappe (FRA), Lionel Messi (ARG — AUTO-PICK whenever Argentina plays and he starts; leaving him out of the warmup cost us ~15 ranks).
+Ousmane Dembele (FRA), Lamine Yamal (ESP), Michael Olise (FRA), Harry Kane (ENG), Bruno Fernandes (POR), Pedri (ESP), William Saliba (FRA), Raphinha (BRA), Bukayo Saka (ENG), Martin Odegaard (NOR), Erling Haaland (NOR), Vinicius Junior (BRA), Jude Bellingham (ENG), Kylian Mbappe (FRA), Lionel Messi (ARG). Any of these who is in today's pool and named in a fresh starting XI is an auto-pick.
 
 Also elite (FOX/ESPN top 50): Vitinha, Joao Neves, Bernardo Silva, Nuno Mendes, Cristiano Ronaldo (POR); Rodri, Nico Williams, Dani Olmo (ESP); Julian Alvarez, Lautaro Martinez, Enzo Fernandez, Alexis Mac Allister (ARG); Declan Rice, Cole Palmer, Phil Foden, Eberechi Eze (ENG); Bruno Guimaraes, Joao Pedro, Gabriel Martinelli (BRA); Florian Wirtz, Jamal Musiala, Joshua Kimmich, Kai Havertz, Antonio Rudiger (GER); Rayan Cherki, Desire Doue, Bradley Barcola, Marcus Thuram, Aurelien Tchouameni (FRA); Kevin De Bruyne, Jeremy Doku (BEL); Achraf Hakimi, Brahim Diaz (MOR); Virgil van Dijk, Denzel Dumfries, Tijjani Reijnders, Cody Gakpo, Frenkie de Jong (NED); Federico Valverde (URU); Moises Caicedo, Willian Pacho, Pervis Estupinan (ECU); Luka Modric, Josko Gvardiol (CRO); Mohamed Salah (EGY); Luis Diaz, James Rodriguez (COL); Son Heung-min, Kim Min-jae (KOR); Alphonso Davies (CAN); Christian Pulisic, Weston McKennie (USA); Viktor Gyokeres, Alexander Isak (SWE); Sadio Mane, Ismaila Sarr (SEN); Antoine Semenyo (GHA); Scott McTominay (SCO); Arda Guler, Kenan Yildiz (TUR); Raul Jimenez (MEX).
 
-Elite GKs: Thibaut Courtois (BEL), Alisson (BRA), Emiliano Martinez (ARG — but G. Rulli started the 2026-06-10 warmup; verify Argentina's GK each matchday), Mike Maignan (FRA), Yassine Bounou (MOR). Germany's ter Stegen is OUT injured — verify their starter before picking a German GK.
+Elite GKs: Thibaut Courtois (BEL), Alisson (BRA), Emiliano Martinez (ARG), Mike Maignan (FRA), Yassine Bounou (MOR). Always verify the day's starting keeper before picking a GK.
 
-### One Verified Star Per Team (all 48 teams — FOX Sports guide, 2026-06-10)
+### One Star Per Team (reference for spotting stars — verify a fresh starting XI before picking any of them)
 
 | Group | Team | Verified star | Pos | Note |
 |-------|------|---------------|-----|------|
@@ -70,39 +45,39 @@ Elite GKs: Thibaut Courtois (BEL), Alisson (BRA), Emiliano Martinez (ARG — but
 | A | South Africa | Lyle Foster | FWD | Needs service |
 | A | South Korea | Son Heung-min | FWD | Most-capped; Kim Min-jae anchors DEF |
 | A | Czechia | Tomas Soucek | MID | Captain |
-| B | Canada | Alphonso Davies | DEF | Returning from injury — confirm start |
+| B | Canada | Alphonso Davies | DEF | Attacking left back |
 | B | Bosnia-Herzegovina | Esmir Bajraktarevic | FWD | Penalty taker |
 | B | Qatar | Almoez Ali | FWD | All-time top scorer (60) |
 | B | Switzerland | Manuel Akanji | DEF | Conceded 2 in 6 qualifiers — CS play |
-| C | Brazil | Raphinha | FWD | Brazil's best last year; Vinicius also elite; NEYMAR DOUBTFUL (calf); Rodrygo/Militao/Estevao OUT |
-| C | Morocco | Brahim Diaz | FWD | Breakout candidate; Hakimi fit again |
+| C | Brazil | Raphinha | FWD | Vinicius also elite |
+| C | Morocco | Brahim Diaz | FWD | Plus Achraf Hakimi |
 | C | Haiti | Johny Placide | GK | Veteran captain, save-bonus candidate |
-| C | Scotland | Scott McTominay | MID | Napoli MVP; Gilmour OUT |
+| C | Scotland | Scott McTominay | MID | Napoli MVP |
 | D | United States | Weston McKennie | MID | Career season; Pulisic also elite |
 | D | Paraguay | Miguel Almiron | MID | Experienced |
 | D | Australia | Jordan Bos | DEF | Attacking left back |
-| D | Turkiye | Kenan Yildiz | FWD | Elite young talent; Arda Guler fit again |
-| E | Germany | Florian Wirtz | MID | Plus Musiala/Kimmich; Gnabry + ter Stegen OUT |
+| D | Turkiye | Kenan Yildiz | FWD | Elite young talent; plus Arda Guler |
+| E | Germany | Florian Wirtz | MID | Plus Musiala/Kimmich |
 | E | Curacao | Eloy Room | GK | Save-bonus candidate in tough group |
 | E | Ivory Coast | Franck Kessie | MID | Captain; Yan Diomande elite dribbler |
 | E | Ecuador | Moises Caicedo | MID | Elite DM; Pacho/Estupinan CS value |
-| F | Netherlands | Virgil van Dijk | DEF | Captain; De Ligt/Timber/Simons/Schouten ALL OUT |
-| F | Japan | Takefusa Kubo | FWD | "Japanese Messi"; Mitoma + Minamino OUT |
+| F | Netherlands | Virgil van Dijk | DEF | Captain |
+| F | Japan | Takefusa Kubo | FWD | Creative forward |
 | F | Sweden | Viktor Gyokeres | FWD | Plus Isak — two elite strikers |
 | F | Tunisia | M. A. Ben Romdhane | MID | Plus Hannibal Mejbri |
 | G | Belgium | Jeremy Doku | FWD | Game-breaker; De Bruyne + Courtois too |
 | G | Egypt | Mohamed Salah | FWD | Penalty taker |
 | G | Iran | Mehdi Taremi | FWD | Captain |
 | G | New Zealand | Chris Wood | FWD | Record scorer and caps leader |
-| H | Spain | Lamine Yamal | FWD | Hamstring — coach targets ~June 15; Fermin Lopez OUT, Merino doubtful |
+| H | Spain | Lamine Yamal | FWD | Generational winger |
 | H | Cape Verde | Dailon Livramento | FWD | Talisman |
 | H | Saudi Arabia | Salem Al-Dawsari | FWD | Captain |
-| H | Uruguay | Federico Valverde | MID | Elite; Jose Gimenez doubtful |
-| I | France | Kylian Mbappe | FWD | Plus Dembele/Olise (ESPN #1/#3) — deepest attack; Ekitike OUT |
+| H | Uruguay | Federico Valverde | MID | Elite midfielder |
+| I | France | Kylian Mbappe | FWD | Plus Dembele/Olise — deepest attack |
 | I | Senegal | Idrissa Gueye | MID | Captain; Mane + Sarr up front |
 | I | Iraq | Ali Al-Hamadi | FWD | Qualification hero |
 | I | Norway | Erling Haaland | FWD | 55 goals in 48 caps; Odegaard creates |
-| J | Argentina | Lionel Messi | FWD | AUTO-PICK; J. Alvarez + Lautaro elite; Romero + Molina doubtful |
+| J | Argentina | Lionel Messi | FWD | J. Alvarez + Lautaro also elite |
 | J | Algeria | Riyad Mahrez | FWD | Algeria's best |
 | J | Austria | Marcel Sabitzer | MID | Integral veteran |
 | J | Jordan | Musa Al-Taamari | FWD | Main attacking threat |
@@ -111,8 +86,8 @@ Elite GKs: Thibaut Courtois (BEL), Alisson (BRA), Emiliano Martinez (ARG — but
 | K | Uzbekistan | Abdukodir Khusanov | DEF | Man City CB |
 | K | Colombia | James Rodriguez | MID | Captain; Luis Diaz the goal threat |
 | L | England | Harry Kane | FWD | Record scorer (78); Bellingham/Saka/Palmer/Foden behind him |
-| L | Croatia | Luka Modric | MID | Recovered from facial fracture |
-| L | Ghana | Antoine Semenyo | FWD | Man City revelation; Kudus doubtful |
+| L | Croatia | Luka Modric | MID | Veteran captain |
+| L | Ghana | Antoine Semenyo | FWD | Plus Mohammed Kudus |
 | L | Panama | Adalberto Carrasquilla | MID | Debut-squad engine |
 
 ### Injury & Availability Protocol — Verify a Fresh Starting XI Every Time (no static list)
@@ -121,14 +96,9 @@ There is **no reliable static availability list** this deep into the tournament:
 
 **Binding rule (covers EVERY player — superstar or squad filler): pick a player ONLY if a fresh predicted/confirmed starting XI for HIS actual match — from The Guardian or Sports Mole — names him in the starting 11.** Reputation, fame, prior caps, or mere eligibility is NOT evidence that he starts today. If his name is not in a fresh predicted XI, or research failed / covered the wrong fixture, **EXCLUDE him and take the next player you CAN confirm starts.** This single check prevents both failure modes at once: it stops you starting an injured/benched star, and it stops you trusting a stale "he's fit" note.
 
-**Eligibility resolves only a narrative write-off** (age, retirement, "he's past it" — the Messi lesson: written off, eligible, hat-trick → pick). It does NOT clear a current fitness or rotation doubt. The rule is asymmetric — never "trust eligibility both ways." "Eligible" and "injured/benched, scores 0" are fully compatible.
+**Eligibility resolves only a narrative write-off** (age, retirement, "he's past it"): a written-off but eligible star is pickable IF a fresh XI starts him. It does NOT clear a current fitness or rotation doubt. The rule is asymmetric — never "trust eligibility both ways." "Eligible" and "injured/benched, scores 0" are fully compatible.
 
-**Season-ending injuries — stable hard-excludes** (reported OUT for the whole tournament on 2026-06-10; treat as still out. If one appears eligible, that is the pool listing the registered squad, NOT a fitness clearance — still require a fresh starting XI before ever trusting it):
-- Brazil: Rodrygo, Eder Militao, Estevao · Netherlands: de Ligt, Timber, Xavi Simons, Schouten
-- Germany: Gnabry, ter Stegen, Lennart Karl · France: Ekitike · Spain: Fermin Lopez
-- Japan: Mitoma, Minamino · USA: Cardoso, Agyemang · Australia: Lewis Miller · Canada: Marcelo Flores · Scotland: Gilmour
-
-**Everyone else has NO pre-set status here.** Do not assume fit, do not assume out — verify each pick against a fresh predicted XI. (Neymar in particular keeps getting auto-picked on reputation while not starting, for 0 points. He is not special: no fresh XI naming him a starter = exclude. The same goes for any big name whose start you cannot confirm.)
+**No static injury list.** Statuses change daily, so this file keeps none — every availability decision comes from a fresh predicted starting XI for the player's actual match. A famous name not in today's fresh XI is excluded, no matter his reputation.
 
 ## World Cup Historical Patterns
 

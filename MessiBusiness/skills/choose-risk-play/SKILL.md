@@ -1,31 +1,33 @@
 ---
 name: choose-risk-play
-description: Adaptive risk play selection using prediction website probabilities, statistical models, and standings-aware risk management to pick the highest expected-value claim.
+description: Expected-value risk play selection — uses prediction-market and Forebet probabilities to pick the highest-EV claim, which is almost always a high-confidence Green.
 ---
 
 # Risk Play Selection Skill
 
-Select the optimal risk play claim by combining prediction site data with adaptive risk management based on your current standings position.
+Select the risk play claim with the highest expected value. The stake is a percentage of your same-day Fantasy XI score, so your standings rank does not affect the choice.
 
-## Step 1: Assess Your Position
+## Step 1: How the Stake Works
 
-1. Read `game-board/standings-before.json` — find your team's rank and `tournament_total`.
-2. Count total teams in standings to calculate your percentile position.
-3. Determine your risk appetite:
+The Risk Play stake is a percentage of your **same-day Fantasy XI score**:
 
-| Your Position | Risk Level | Preferred Claims |
-|--------------|------------|-----------------|
-| Top 10% | Very Conservative | GREEN only — protect your lead |
-| 11-25% | Conservative | GREEN, or YELLOW only with 65%+ probability |
-| 26-50% | Moderate | YELLOW preferred, with 55%+ probability |
-| 51-75% | Aggressive | YELLOW or RED with strong evidence |
-| Bottom 25% | Very Aggressive | RED with any reasonable evidence |
-| Below 15 points | Maximum Aggression | RED — the downside is trivial (35% of 15 = 5 pts) |
+| Risk type | Stake | If correct | If incorrect |
+|-----------|-------|-----------|--------------|
+| Green  | 15% of same-day XI | +15% | −15% |
+| Yellow | 25% of same-day XI | +25% | −25% |
+| Red    | 35% of same-day XI | +35% | −35% |
+| Invalid / skipped | 0 | 0 | 0 |
 
-4. Note your exact point total — this determines actual stake size:
-   - Green: 15% of total (e.g., 50 pts → 8 pts at risk)
-   - Yellow: 25% of total (e.g., 50 pts → 13 pts at risk)
-   - Red: 35% of total (e.g., 50 pts → 18 pts at risk)
+An XI that scores 0 makes the stake 0. The stake comes from today's XI, not your tournament total, so **pick by probability, not by rank.**
+
+### Pick the highest expected value
+
+Expected value of a claim = `stake% × (2P − 1)`, where P is its hit probability. The higher-stake tiers (Yellow, Red) are also the lower-probability claims, so a bigger stake rarely beats a high-probability Green. Therefore:
+
+1. **Default: Green `match_2plus_goals` on the strongest favorite** (~85% when a heavy favorite plays). This is the pick on a normal day, at every rank.
+2. **Yellow `match_2plus_yellow_cards` only** when read evidence puts a physical match at ~70%+.
+3. **Never take a Red claim** — every Red claim is below 50% probability, which is negative expected value.
+4. **Stake on the same match as your strongest Fantasy XI picks.**
 
 ## Step 2: Research Match Probabilities from Prediction Sites
 
@@ -56,19 +58,19 @@ For EACH match today, search prediction websites for specific probabilities:
 
 ## Step 3: Map Predictions to Claims
 
-### GREEN CLAIMS (15% stake) — Target 75%+ win probability
+### GREEN CLAIMS (15% of same-day XI) — Target 75%+ win probability — your default tier
 
 | Claim | When Prediction Sites Say... | Base Probability |
 |-------|------------------------------|-----------------|
 | `match_2plus_goals` | Default — ~75% of WC matches have 2+ goals; near-lock when a strong favorite plays (Forebet over 1.5 > 70%) | ~78% (~85%+ with a heavy favorite) |
 | `goal_before_halftime` | Forebet over 0.5 first half > 65%, attacking match or heavy favorite | ~75% |
 | `match_2plus_cards` | Physical teams, competitive match, or Forebet cards prediction | ~78% |
-| `no_goal_first_10` | ONLY in even, cagey matchups. **NEVER with a heavy favorite** — favorites press from kickoff (warmup: Argentina scored inside 10' vs Iceland and this claim lost our 8-pt stake) | ~75% even match; ~60-65% with heavy favorite |
+| `no_goal_first_10` | ONLY in even, cagey matchups. **NEVER with a heavy favorite** — favorites press from kickoff | ~75% even match; ~60-65% with heavy favorite |
 | `no_goal_stoppage_time` | Cagey/defensive matches only — modern stoppage time is long, making this riskier than it looks | ~75% |
 
-**Default GREEN pick**: `match_2plus_goals` on the match with the strongest favorite. Calibration: both warmup matches (3-0 and 1-2) hit it, and the teams that took it gained +8 while our `no_goal_first_10` lost -8.
+**Default GREEN pick**: `match_2plus_goals` on the match with the strongest favorite.
 
-### YELLOW CLAIMS (25% stake) — Target 60%+ win probability
+### YELLOW CLAIMS (25% of same-day XI) — only `match_2plus_yellow_cards` at ~70%+ is worth it
 
 | Claim | When Prediction Sites Say... | Expected Probability |
 |-------|------------------------------|---------------------|
@@ -76,12 +78,14 @@ For EACH match today, search prediction websites for specific probabilities:
 | `team_scores_first` | One team is 70%+ favorite AND predicted to score first | ~60% |
 | `match_over_2_5_goals` | Forebet over 2.5 > 60%, multiple experts predict 3+ goals | ~55% |
 | `both_teams_score` | Forebet BTTS > 60%, two attacking teams facing each other | ~55% |
-| `player_scores` | Star forward on dominant team (Mbappe, Vinicius, Kane), confirmed starter | ~40% |
+| `player_scores` | Star forward on a dominant team, confirmed starter | ~40% |
 
 **Best YELLOW pick**: `match_2plus_yellow_cards` — highest probability Yellow claim.
 **Best upside YELLOW**: `team_scores_first` on a heavy favorite backed by Forebet data.
 
-### RED CLAIMS (35% stake) — Only with strong evidence
+### RED CLAIMS (35% of same-day XI) — AVOID under the current rule
+
+> Every Red claim below is below 50% probability, so it is **negative expected value**. Do not take a Red claim on a normal group-stage day.
 
 | Claim | When Prediction Sites Say... | Expected Probability |
 |-------|------------------------------|---------------------|
@@ -96,37 +100,30 @@ For EACH match today, search prediction websites for specific probabilities:
 **Best RED pick (group stage)**: `team_wins_by_3plus` on a massive mismatch.
 **Best RED pick (knockout)**: `match_goes_to_extra_time` on an even knockout match.
 
-## Step 4: Decision Algorithm
+## Step 4: Decision Algorithm (EV-first — same at every rank)
 
 ```
-1. Get your risk appetite from Step 1 (Conservative / Moderate / Aggressive)
-2. Get prediction probabilities from Step 2
+1. From research, find the match with the strongest favorite
+   (highest market win prob / Forebet 1X2) and its goal-line numbers
+   (Forebet over 1.5 / over 2.5). This is your target match — and it
+   should be the same fixture your best Fantasy XI picks come from.
 
-IF risk appetite is Conservative:
-    → Find the GREEN claim with highest probability from research
-    → Prefer: match_2plus_goals on the strongest favorite's match (~85%),
-      or match_2plus_cards (~78%) in a physical competitive match
-    → Only use no_goal_first_10 when ALL matches are even/cagey — never against a heavy favorite
-    → Pick the match with the clearest prediction consensus
+2. DEFAULT: Green match_2plus_goals on that match.
+   Confirm it clears ~80% (heavy favorite, or Forebet over-1.5 > 70%,
+   or two attacking sides). On a normal day this is the pick — stop here.
 
-ELSE IF risk appetite is Moderate:
-    → Check if any YELLOW claim has 60%+ probability based on predictions
-    → YES → Take that Yellow claim
-    → NO → Fall back to best GREEN claim
-    → Best options: match_2plus_yellow_cards, team_scores_first
+3. YELLOW UPGRADE TEST (only fires with real evidence):
+   Is there a match with read evidence of a physical/card-heavy game
+   (derby/grudge, or a Forebet cards line) at ~70%+ for 2+ yellow cards?
+   YES and the evidence is genuinely that strong → match_2plus_yellow_cards.
+   Otherwise → stay on the Green from step 2.
 
-ELSE IF risk appetite is Aggressive:
-    → Check if any RED claim has strong multi-source support
-    → YES AND match is a clear mismatch → Take the Red claim
-    → YES BUT uncertain → Take best Yellow claim instead
-    → NO → Take best Yellow claim
-    → Never take exact_score or team_comeback_win unless overwhelmingly supported
-
-SPECIAL CASE: Your team has very few points (< 15):
-    → Even Red claims only risk 5 points max
-    → Be aggressive: take the Red claim with the best narrative support
-    → team_wins_by_3plus on any lopsided match is the go-to
+4. RED: do not take any Red claim — all are negative-EV. If nothing
+   clears the Green bar with confidence, go to Step 7 (skip, or blind
+   Green on the clearest board mismatch).
 ```
+
+Your rank does not change this algorithm — leader or last place, the highest-EV claim is the same high-confidence Green.
 
 ## Step 5: Select Match and Construct the Claim
 
@@ -162,7 +159,7 @@ If ALL of the following are true:
 
 Then choose ONE of:
 - `risk_play: null` (skip entirely — no risk, no reward)
-- `{ "claim_id": "match_2plus_goals", "match_id": "[the match whose teams look most mismatched on the board data]" }` (safest blind Green — ~75% baseline, higher in mismatches; never blind-pick no_goal_first_10, it lost our warmup stake)
+- `{ "claim_id": "match_2plus_goals", "match_id": "[the match whose teams look most mismatched on the board data]" }` (safest blind Green — ~75% baseline, higher in mismatches; never blind-pick no_goal_first_10)
 
 A wrong claim loses points. A skipped claim loses nothing. When truly blind, skipping is better than guessing on Yellow/Red.
 

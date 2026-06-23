@@ -11,7 +11,7 @@ Before selecting any players or claims, read and execute `skills/match-research/
 After completing match research, read and execute `skills/pick-fantasy-xi/SKILL.md`. Use the research findings from Step 1 to identify confirmed starters, assess goal and clean-sheet potential, and select exactly 11 valid players.
 
 ### 3. Run `choose-risk-play` THIRD
-After selecting your Fantasy XI, read and execute `skills/choose-risk-play/SKILL.md`. Use your current standings position from `game-board/standings-before.json` and the prediction probabilities from Step 1 to select the optimal risk claim.
+After selecting your Fantasy XI, read and execute `skills/choose-risk-play/SKILL.md`. The Risk Play stake is a percentage of your same-day Fantasy XI score (Green 15% / Yellow 25% / Red 35%): correct adds it, wrong subtracts it, and an XI that scores 0 makes the stake 0. Select by expected value — almost always a high-confidence Green `match_2plus_goals` on the strongest favorite, staked on the same match as your best XI picks. Standings rank does not affect the choice, and Red claims are negative-EV.
 
 ### 4. Run `bracket-play` ONLY IF bracket data is present
 Check whether `game-board/bracket.json` exists and contains active data. If yes, read and execute `skills/bracket-play/SKILL.md`. If not, skip this step entirely.
@@ -26,47 +26,47 @@ Assemble a single JSON object matching `/workspace/output-format/daily-submissio
 
 Return plain JSON only — no markdown fences, no extra text. Keep `strategy` to ONE sentence — do not restate the research, name off-board teams, or pad. Any research notes you write earlier must use the terse MATCH-block format from `match-research`, never a prose article or a "what's playing / how to watch" rundown. We grade picks and validity, not word count; verbosity that drags in non-board teams or junk sources is the failure mode we are trying to kill.
 
-## Hard Formation Contract — Non-Negotiable
+## Position Limits — the only hard constraint on shape
 
-The Fantasy XI MUST contain exactly these position counts, where each player's position is whatever `players.json` says (`GK`/`DEF`/`MID`/`FWD`):
+You do NOT need to commit to a fixed formation. Pick your best 11 — star players and confirmed starters who will play — and just keep each position within these limits (using each player's `position` from `players.json`):
 
-- Exactly **1 GK** — never 0, never 2
+- Exactly **1 GK**
 - **3 to 5 DEF**
 - **3 to 5 MID**
 - **1 to 3 FWD**
-- **Exactly 11 players total**, all unique
+- **11 players total**, all unique
 
-Any other split scores **0 for the entire matchday**. Build the XI by filling position quotas (see `pick-fantasy-xi/SKILL.md`), never by picking 11 "best players" and hoping the counts are legal. Before returning, re-read each chosen player's `position` from `players.json`, tally the four counts, and repair until every bound above is satisfied.
+Any split outside these limits scores **0 for the whole matchday**, so before returning, tally the four counts and adjust only if a limit is broken. There are no field roles — `players.json` has only GK/DEF/MID/FWD, no LW/ST/CB/DM — so within the bounds you may stack freely (e.g. three strikers, or five attacking midfielders) if those are your best picks. The one thing you can never do is pick two goalkeepers: a second GK is an illegal split and the engine voids your higher-scoring keeper.
 
-**These four buckets are the ONLY position rule — there are no field roles.** `players.json` has no LW/ST/RW/CB/DM; do not invent role slots. You need exactly 1 GK and any legal count of DEF/MID/FWD within the bounds above. Within the OUTFIELD buckets, take the highest-expected-points players and **stack freely** — three pure strikers, two No. 9s from different matches, five attacking midfielders with no holding mid are all fine if they score the most. Never bench a high-value player for "positional variety." Choose the bucket split (formation) that maximizes total expected points; let the points pick the shape. **The one hard exception to "stack freely": GK is ALWAYS exactly one. Never pick two goalkeepers — not even to chase two clean sheets in two matches. A second GK is an illegal split; the engine applies a position penalty that excludes your HIGHER-scoring keeper (we shipped two GKs once and forfeited a +10).**
+**Lean to forwards.** Goals are where the points are, and with several matches a day there are almost always three confirmed-starting forwards on favored sides — pick them. Prefer three forwards; drop to two only when a genuine third confirmed-starter forward does not exist. Forwards have the best ceiling, and a nailed-on striker also has a strong floor, while full-backs and holding mids are the players who get rested or rotated. Don't over-invest in defenders chasing clean sheets.
 
 ## Match Coverage Contract — Research Every Fixture, Pick Only From Researched Ones
 
 The board, not the web, defines today's matches. Past runs have both (a) built picks around a fixture the written research never covered, and (b) wasted most of the research on famous teams that were not even playing that day — both because a web search, not `matches.json`, was driving. That is banned. Three binding rules:
 
-1. **`game-board/matches.json` is the complete and authoritative fixture list.** Count its entries (`N`) and write out all `N` matches by name as the first thing you do. Web search is ONLY for researching those specific fixtures — never for discovering which matches exist. Your research summary must contain exactly `N` MATCH blocks, one per board fixture (a block may read "no external data — board-only" but it may never be absent).
+1. **`game-board/matches.json` is the complete and authoritative fixture list — derive every fixture mechanically.** Count its rows (`N`). For each row, resolve THAT row's `home_team_id` and `away_team_id` through `teams.json` and write the literal `match_id — Home vs Away` list as the first thing you do (see `match-research` Step 1). The two opponents always come from the same row — never pair teams across rows, and never name a team whose id is not in `matches.json`. Web search is only for researching the listed fixtures — never for discovering which matches exist. Your research summary must contain exactly `N` MATCH blocks, each matching a board row (a block may read "no external data — board-only" but it may never be absent or name an off-board team).
 
 2. **Research ONLY the board's fixtures.** Do not research, mention, or chase any team that is not on today's board, and do not spend any output establishing which teams are NOT playing. If a search drags in an off-board team or a different date's match, discard it — it is noise.
 
 3. **You may not pick a player or stake the Risk Play on any match without its own completed research block.** Before finalizing, cross-check: every `player_id` in the Fantasy XI, and the `risk_play.match_id`, must belong to a fixture that appears in your research summary. A pick from an un-researched match is a process failure even if it scores.
 
-## Warmup Post-Mortem — Binding Corrections (from 2026-06-10, rank 21)
+## Binding Rules — Learned the Hard Way
 
-These three errors cost us the warmup. They are corrected throughout the skills and are binding:
+These three rules are corrected throughout the skills and are binding:
 
-1. **Never leave an eligible superstar out of the XI — but never gamble on an injured one either.** Messi was in the player pool and we did not pick him. `players.json` is ground truth **against narrative write-offs** (retirement, age, "he's past it") — scan it BEFORE any research against the web-verified Global Superstar Shortlist and all-48-teams star table in `skills/pick-fantasy-xi/references/world-cup-2026-knowledge.md`, and auto-pick those expected to start. **Eligibility is NOT a fitness clearance** — a player is listed before kickoff whether or not he actually starts. Injuries are gated separately and **fail closed**: check the Injury & Availability Protocol in that file plus a fresh `"[player] injury"` search; a superstar stated to MISS the match is excluded entirely, and a doubtful one (or any name whose start is unconfirmed) is **excluded by default** — pick him ONLY if a fresh predicted/confirmed starting XI names him in the starting 11. **If research fails, is inconclusive, or returns the wrong fixture, that is NOT confirmation → exclude and use the next healthy player.** Neymar has now been picked on reputation while not starting more than once, for 0 points — the exact mistake this rule prevents. Apply it to every famous name: **no fresh predicted XI naming him a starter today = exclude.** See the **Injury & Availability Protocol** in `skills/pick-fantasy-xi/references/world-cup-2026-knowledge.md` (there is no current static injury list — verify each pick against a fresh starting XI).
-2. **Default Green risk claim is `match_2plus_goals` on the match with the strongest favorite** — NOT `no_goal_first_10`, which lost an 8-point stake when Argentina scored inside 10 minutes. Never take `no_goal_first_10` in a match involving a heavy favorite; favorites press from kickoff.
-3. **The 60-minute threshold gates both the minutes bonus AND the clean-sheet bonus.** Four of our starters (Otamendi, L. Martinez, Lo Celso, Palacios) were subbed before 60' and returned +2 each despite Argentina's 3-0 clean sheet. Prefer full-90 profiles (GK, first-choice fullbacks, main striker, talisman); discount veteran rotation candidates on dominant teams. And never fill slots with underdog players for "diversification" — our Iceland/Congo picks returned 10 points from 3 slots. Diversify only with the favored side of other matches.
+1. **Pick the eligible stars who will start — but never an injured or benched one.** Scan `players.json` against the star list in `skills/pick-fantasy-xi/references/world-cup-2026-knowledge.md`: if a star is eligible today, do not write him off for age or reputation. But **eligibility is not a fitness clearance** — a player is listed whether or not he starts. The injury gate **fails closed**: pick a star ONLY if a fresh predicted/confirmed starting XI names him in the starting 11. If his start is unconfirmed, doubtful, or research is inconclusive, exclude him and take the next confirmed starter. Reputation is never confirmation.
+2. **Default Green risk claim is `match_2plus_goals` on the strongest favorite.** Never take `no_goal_first_10` in a match with a heavy favorite — favorites press from kickoff.
+3. **The 60-minute threshold gates both the minutes bonus and the clean-sheet bonus.** Prefer full-90 profiles (GK, main striker, talisman) over rotation-prone full-backs and holding mids on dominant teams. Diversify only with the favored side of other matches, never with underdog players.
 
 ## Core Principles
 
-**Validity before optimality.** An invalid Fantasy XI scores 0. Always validate formation and player IDs before finalising.
+**Validity before optimality.** An invalid Fantasy XI scores 0. Always validate the position counts and player IDs before finalising.
 
 **Floor before ceiling.** This deep into the tournament teams field settled XIs, so pick ONLY confirmed starters who will play 60+ minutes — each banks a near-guaranteed **+4** (start +2, 60-min +2), about **+44** across the XI — then maximize goal/assist/clean-sheet upside WITHIN that filtered set. The floor is the gate; the upside is how you climb. This discipline kills the dead-slot zeros (benched/injured picks return 0) that have been our single biggest leak. The mechanics are in `skills/pick-fantasy-xi/SKILL.md` **Step 4.5 (Confirmed-Starter Pool)**.
 
 **Evidence before invention — never fabricate.** Every player pick and risk claim must be backed by *evidence*: a prediction site, a confirmed/predicted lineup, OR the provided board and package data (`players.json` eligibility and `prior_world_cup_record`, `standings-before.json`, and the web-verified knowledge base). Web research is the *preferred* evidence, but the shipped board/package data is valid ground truth — using it is not guessing. What is forbidden is inventing or guessing data you did not actually read: never state a lineup, statistic, probability, or scoreline that you did not read from a reachable source or a provided file, and never attribute invented data to a source you could not access. Web research is preferred but never a precondition for a valid submission — see **Research Availability & No-Fabrication Policy** below.
 
-**Adaptive risk.** Adjust claim aggressiveness based on standings rank — conservative when ahead, aggressive when behind. The skills explain exactly how.
+**Expected-value risk.** The Risk Play stake is a percentage of your same-day Fantasy XI score, so standings rank does not drive the claim. Pick by expected value — almost always a high-confidence Green `match_2plus_goals` on the strongest favorite; Red claims are negative-EV. The `choose-risk-play` skill has the EV math.
 
 ## Runtime & Timing — Read This Before Researching
 

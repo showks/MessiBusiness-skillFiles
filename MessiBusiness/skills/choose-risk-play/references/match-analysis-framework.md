@@ -31,8 +31,7 @@ These factors can shift predictions significantly:
 - Dead rubber (both teams qualified): rotated squads, experimental lineups
 
 **Head-to-Head History** (minor signal — the market and Forebet already price it in)
-- Some matchups are historically high-scoring (e.g., Brazil vs Argentina)
-- Some matchups are historically cagey (e.g., France vs Germany)
+- Some matchups are historically high-scoring, some historically cagey
 - If a core preview (The Guardian) mentions the H2H pattern, note it; don't go hunting dedicated H2H sites for daily picks
 
 **Referee Tendencies**
@@ -48,7 +47,7 @@ For the match's archetype, estimate each claim's probability:
 | Claim | Estimated Probability | Reasoning |
 |-------|----------------------|-----------|
 | `match_2plus_goals` | 90% | Favorite will score multiple — THE green pick for this archetype |
-| `no_goal_first_10` | 60% | DO NOT TAKE — favorites press from kickoff (warmup: Argentina scored inside 10' vs Iceland, claim lost) |
+| `no_goal_first_10` | 60% | DO NOT TAKE — favorites press from kickoff |
 | `goal_before_halftime` | 85% | Favorite usually scores before HT |
 | `match_2plus_cards` | 70% | Fewer fouls when one team dominates |
 | `team_scores_first` (favorite) | 80% | Heavy favorite usually opens scoring |
@@ -98,5 +97,5 @@ The math clearly shows: **Green claims with high probability dominate Red claims
 2. **Favorite bias**: Even 80% favorites lose 20% of the time — that's 1 in 5 matches
 3. **Narrative bias**: "This team is due for an upset" is not a probability-based argument
 4. **Sunk cost**: Past losses don't affect today's optimal claim — always pick based on today's probabilities
-5. **Gambling fallacy**: "I've been conservative, time to go big" — your strategy should be standings-based, not feelings-based
-6. **"Safe claim" fallacy**: No claim is safe independent of the matchup. `no_goal_first_10` looks safe on paper but collapses to ~60% when a heavy favorite plays — match every claim to the archetype tables above before calling it Green-worthy (we lost our warmup stake to this exact mistake)
+5. **Gambling fallacy**: "I've been conservative, time to go big" — your strategy should be expected-value-based, not feelings-based
+6. **"Safe claim" fallacy**: No claim is safe independent of the matchup. `no_goal_first_10` looks safe on paper but collapses to ~60% when a heavy favorite plays — match every claim to the archetype tables above before calling it Green-worthy

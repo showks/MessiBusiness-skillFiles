@@ -7,12 +7,20 @@ description: Deep pre-match research skill that queries prediction websites, sta
 
 Before making any picks, research every match on today's board using prediction websites and statistical platforms. This research informs both the Fantasy XI selection and the Risk Play decision.
 
-## Step 1: Identify Today's Matches — From the Board, Not the Web
+## Step 1: List Today's Fixtures From the Board (before any web search)
 
-1. Read `game-board/matches.json` to list all fixtures. **This file is the complete and authoritative schedule.** Count its entries — call it `N`. You will research exactly `N` matches and your summary will end with exactly `N` MATCH blocks.
-2. Read `game-board/teams.json` to get team names and countries.
-3. For each match, note: `match_id`, home team name, away team name, kickoff time. Write out the full numbered roster (1..`N`) of fixtures before searching anything.
-4. **Web search NEVER decides which matches exist, and you research ONLY the board's fixtures.** Do not ask the web "what matches are on today" — search engines return partial or wrong schedules. Research each of the `N` board fixtures BY NAME (e.g. `"[home] vs [away] World Cup 2026"`). Do NOT research, mention, or chase any team that is not on today's board, and do NOT spend a single line establishing which teams are NOT playing — that is wasted effort that has polluted past runs (one summary burned most of its length on four teams that weren't playing that day while barely covering the four that were). If a search drags in an off-board team or a different date's match, discard it.
+**A fixture is exactly one row of `matches.json` — never two team names you recall.** Build the fixture list mechanically:
+
+1. Read `game-board/matches.json`. This is the complete and authoritative schedule. Count its rows — call it `N`. You research exactly `N` fixtures and your summary ends with exactly `N` MATCH blocks.
+2. Read `game-board/teams.json` into a `team_id → country name` map.
+3. For each row, resolve **that row's own two IDs**: `home = teams[row.home_team_id]`, `away = teams[row.away_team_id]`, plus `row.match_id` and `kickoff_at`. The two opponents always come from the same row — never pair a team from one row with a team from another, and never introduce a team whose id is not in `matches.json`.
+4. Write the numbered fixture list before searching anything:
+   ```
+   FIXTURES (N = <count>):
+   1. match_id <id> — <Home> (team_id <h>) vs <Away> (team_id <a>), kickoff <time>
+   2. ...
+   ```
+5. **This list is the only set of fixtures and team names you may search, mention, or pick from.** Every search query must name a pairing from the list (`"<Home> vs <Away> World Cup 2026"`). Do not search a pairing that is not a row in the list, do not search a team that is not in the list, do not ask the web which matches are on today, and do not write about which teams are NOT playing.
 
 Remember the clock: the agent runs at ~09:00 Mountain Time, so confirmed XIs for today's matches are usually not out yet. Lean on predicted lineups, overnight-published US previews, and prediction-market odds (see README "Runtime & Timing").
 
@@ -59,13 +67,13 @@ Skip dedicated ratings/xG sites (WhoScored, SofaScore, FBref); they rarely chang
 
 ### 2d. Search for Key Player Intel
 
-**First, scan `game-board/players.json` for global superstars in today's eligible pool**, using the web-verified Global Superstar Shortlist and all-48-teams star table in `../pick-fantasy-xi/references/world-cup-2026-knowledge.md`. The pool is ground truth: any superstar listed as eligible IS at the tournament and pickable — never write one off from memory or pre-tournament narratives. Flag every eligible superstar prominently in the research summary so the XI skill cannot miss them (we missed an eligible Messi in the warmup and paid for it).
+**First, scan `game-board/players.json` for global superstars in today's eligible pool**, using the Global Superstar Shortlist and all-48-teams star table in `../pick-fantasy-xi/references/world-cup-2026-knowledge.md`. The pool is ground truth: any superstar listed as eligible IS at the tournament and pickable — never write one off from memory or pre-tournament narratives. Flag every eligible superstar prominently in the research summary so the XI skill cannot miss them.
 
 **Then verify each flagged superstar's fitness** via the **Injury & Availability Protocol** in that same knowledge file. There is no current static status list — run fresh searches and decide from a fresh predicted XI:
 - Search: `"[Player name] injury"` and `"[Team name] team news World Cup 2026"`
 - Record one status per superstar: **OUT** (stated to miss this match / not in squad / suspended, or a season-ending hard-exclude — drop from all picks), **DOUBTFUL** (any fitness or rotation doubt), or **STARTING** (named in a fresh predicted XI for this match — only then an auto-pick).
 - **OUT and DOUBTFUL are both fail-closed: pick ONLY if a fresh predicted/confirmed XI names him in the starting 11.** Pool eligibility never upgrades a player to STARTING — he is listed whether or not he plays. If you cannot find a fresh lineup, or research failed / returned the wrong fixture, leave him EXCLUDED and tell the XI skill to use the next confirmed starter. Never resolve a doubt with "he's in the pool."
-- Apply this to every big name, no exceptions: reputation is not a team sheet. Stars including Neymar keep getting wrongly picked while not starting (0 points) — only a fresh XI naming the player a starter clears anyone. Do not rely on a remembered injury list; verify per match.
+- Apply this to every big name, no exceptions: reputation is not a team sheet. Only a fresh XI naming the player a starter clears anyone. Do not rely on a remembered injury list; verify per match.
 
 For the star players on each team:
 - Search: `"[Player name] World Cup 2026 form"` for current fitness and form
@@ -131,10 +139,11 @@ Pass these board-derived findings forward with explicit low confidence so the XI
 Before handing findings to the pick skills, verify:
 
 - [ ] The number of MATCH blocks equals `N`, the count of fixtures in `matches.json`. Every `match_id` on the board appears in the summary exactly once.
+- [ ] **Reconcile each block to the fixture list:** for every MATCH block, its `match_id` is a real row in `matches.json` and its two team names equal `teams[home_team_id]` and `teams[away_team_id]` for that row. If a block names a team not in the list, or a pairing that is not a single board row, delete it and research the row it should have been.
 - [ ] No fixture was dropped because research was thin — thin matches are present as board-only blocks, not missing.
 - [ ] Every source you named in the summary is one you actually read content from (no citing ESPN/BBC/Forebet/a market for a figure you never retrieved).
 
-This is the hand-off promise to the downstream skills: **a player or risk claim may only be chosen from a match that has a block here.** If `pick-fantasy-xi` or `choose-risk-play` later wants a player/match that has no block (e.g. an eligible Messi from a fixture you under-researched), the fix is to come back and research that fixture — never to pick from a blank.
+This is the hand-off promise to the downstream skills: **a player or risk claim may only be chosen from a match that has a block here.** If `pick-fantasy-xi` or `choose-risk-play` later wants a player or match with no block, the fix is to come back and research that fixture — never to pick from a blank.
 
 ## Step 6: Pass Findings Forward
 

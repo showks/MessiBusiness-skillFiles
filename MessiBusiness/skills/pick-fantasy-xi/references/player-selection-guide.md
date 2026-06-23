@@ -8,7 +8,7 @@
 | Plays 60+ min | +2 | Most starters | Starters who play full 90 = guaranteed +4 |
 | Goal scored | +6 | ~2.5 per match average | Target prolific forwards on strong teams |
 | Assist recorded | +4 | ~1.5 per match average | Target creative midfielders and playmakers |
-| Clean sheet (DEF/GK, requires 60+ min played) | +4 | ~30% of teams per match | Target FULL-90 defenders from clear favorites — defenders subbed before 60' earn nothing from a shutout (verified in warmup: Otamendi/L. Martinez got +2 despite Argentina's 3-0 clean sheet) |
+| Clean sheet (DEF/GK, requires 60+ min played) | +4 | ~30% of teams per match | Target FULL-90 defenders from clear favorites — defenders subbed before 60' earn nothing from a shutout |
 | GK 3+ saves | +2 | ~50% of GKs per match | GKs facing moderate shot volume are ideal |
 | Yellow card | -1 | ~3-4 per match average | Avoid defensive midfielders in tense matches |
 | Red card | -3 | ~2% chance per player | Rare but devastating; avoid reckless players |
@@ -41,9 +41,9 @@
 - Must-win group matches: more cards
 - Rivalry matches: significantly more cards
 
-### Substitution Risk (learned in the 2026-06-10 warmup)
+### Substitution Risk
 - A start is only worth +2 if the player is subbed before 60 minutes — and an early sub ALSO forfeits the clean-sheet bonus.
-- Highest sub risk: veteran (30+) center-backs and holding midfielders on dominant teams — once the game is safe, managers rest legs. In the warmup, Otamendi, Lisandro Martinez, Lo Celso, and Palacios all started vs Iceland and were withdrawn before 60' (+2 each instead of +8).
+- Highest sub risk: veteran (30+) center-backs and holding midfielders on dominant teams — once the game is safe, managers rest legs.
 - Lowest sub risk: goalkeepers (effectively never subbed), first-choice fullbacks, the main striker, and the team's talisman.
 - Deduct **-1.5 expected points** from veteran rotation candidates in matches their team should win comfortably; prefer the full-90 profiles above for clean-sheet plays.
 
@@ -51,8 +51,8 @@
 
 ### Tier 0: Automatic Picks (check BEFORE any scoring)
 - Scan today's eligible pool in `players.json` for global superstars using the web-verified Global Superstar Shortlist and the all-48-teams star table in `world-cup-2026-knowledge.md`. The pool is ground truth: if a superstar is eligible, they are playing in this tournament — never assume retirement or absence based on narratives.
-- Any such superstar expected to start is an automatic pick. Leaving an eligible Messi out of the warmup XI was our costliest error of the entire matchday.
-- **Injury gate (fail-closed)**: before auto-picking, apply the Injury & Availability Protocol in `world-cup-2026-knowledge.md` AND run a fresh `"[player] injury"` search. Stated to MISS the match → drop from the XI entirely (an absent superstar scores 0). Any fitness or rotation doubt → **EXCLUDE by default**; pick ONLY if a fresh predicted/confirmed starting XI names him in the starting 11. Pool eligibility does not clear a doubt, and failed/wrong-fixture research counts as no confirmation → exclude and use the next confirmed starter in the same pool. Reputation is never confirmation — big names (Neymar included) have scored 0 picked on fame while benched/injured.
+- Any such superstar expected to start is an automatic pick. Leaving an eligible, starting superstar out is a costly miss.
+- **Injury gate (fail-closed)**: before auto-picking, apply the Injury & Availability Protocol in `world-cup-2026-knowledge.md` AND run a fresh `"[player] injury"` search. Stated to MISS the match → drop from the XI entirely (an absent superstar scores 0). Any fitness or rotation doubt → **EXCLUDE by default**; pick ONLY if a fresh predicted/confirmed starting XI names him in the starting 11. Pool eligibility does not clear a doubt, and failed/wrong-fixture research counts as no confirmation → exclude and use the next confirmed starter in the same pool. Reputation is never confirmation — big names have scored 0 picked on fame while benched/injured.
 
 ### Tier 1: Must-Pick (Expected 6+ points)
 - Star forward for heavy favorite, confirmed starter
@@ -92,7 +92,7 @@ When `prior_world_cup_record` is available:
 
 When 3-4 matches are on the same day:
 - Spread picks across matches to reduce variance
-- Diversify ONLY with players from the FAVORED side of each match. An underdog starter caps out around +4 (start + minutes) with near-zero goal/clean-sheet upside — in the warmup, our 2 Iceland + 1 Congo DR picks returned 10 points from 3 slots while the favorite's productive players returned 7-8 each.
+- Diversify ONLY with players from the FAVORED side of each match. An underdog starter caps out around +4 (start + minutes) with near-zero goal/clean-sheet upside.
 - Never roster a player from a team expected to lose just to "represent" that match. If a match has no clearly favored side, take its best attackers; otherwise skip the match entirely.
 - Concentration in one match is acceptable only when that match has an overwhelming favorite (e.g., Brazil vs a very weak team)
 - Aim for at least 2 different matches represented in your XI

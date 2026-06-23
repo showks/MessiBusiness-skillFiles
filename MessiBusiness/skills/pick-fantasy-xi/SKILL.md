@@ -19,7 +19,7 @@ Select exactly 11 players from `game-board/players.json` to maximize expected fa
 
 ### Step 2.0: Superstar pool scan (do this FIRST, before any web search)
 
-Scan the eligible players from Step 1 for global superstars using the **Global Superstar Shortlist** and the **One Verified Star Per Team** table in `references/world-cup-2026-knowledge.md` (web-verified list covering all 48 teams). The pool is ground truth **for narrative write-offs only**: **if a superstar is in `players.json` and eligible today, they are playing in this tournament** — never write them off based on prior narratives, age, or assumed retirement. In the warmup we left an eligible Messi out of the XI; it was our costliest error and we finished rank 21.
+Scan the eligible players from Step 1 for global superstars using the **Global Superstar Shortlist** and the **One Verified Star Per Team** table in `references/world-cup-2026-knowledge.md` (web-verified list covering all 48 teams). The pool is ground truth **for narrative write-offs only**: **if a superstar is in `players.json` and eligible today, they are playing in this tournament** — never write them off based on prior narratives, age, or assumed retirement. Leaving an eligible, starting superstar out of the XI is a costly miss.
 
 **Pool eligibility is NOT a fitness clearance.** Eligibility rebuts *narrative* doubts (age, retirement, "successor generation"). It does NOT rebut a *specific, current injury or fitness report*. A name flagged by the Injury & Availability Protocol, or any name with a fresh "injury" / "team news" hit, stays gated by the check below no matter how eligible the pool says they are. Players appear in `players.json` before kickoff regardless of whether they will actually start, so an injured star can be both "eligible" and a guaranteed 0.
 
@@ -27,10 +27,10 @@ Scan the eligible players from Step 1 for global superstars using the **Global S
 1. Follow the **Injury & Availability Protocol** in `references/world-cup-2026-knowledge.md`: there is no current static status list — run a FRESH search `"[Player name] injury"` / `"[Team name] team news"` and decide from a **fresh predicted XI**, not any dated snapshot. The only stable list is the season-ending hard-excludes in that Protocol.
 2. **Reports state he will MISS this match** (ruled out, not in squad, suspended) → remove him from auto-pick AND from XI consideration entirely. An injured superstar scores 0.
 3. **Doubtful / game-time decision / "racing to be fit" / any unconfirmed start** → **EXCLUDE by default.** Pick him ONLY if a fresh **predicted or confirmed starting XI explicitly names him in the starting 11** (a generic "he's eligible" or "could feature" is not enough). One such source is the bar; if sources conflict, exclude.
-4. **Research is missing, inconclusive, failed, returned the wrong fixture, or you simply could not confirm a start** → treat the flag as UNRESOLVED → **EXCLUDE.** Do not fall back to "he's in the pool so pick him." Skip to the next-best **healthy** player in the same pool. There is never a reason to gamble a slot on an unconfirmed injury doubt: the board has 49 FWDs, 67 MIDs, 70 DEFs, 25 GKs — a fit replacement always exists, and skipping one doubtful star costs nothing.
+4. **Research is missing, inconclusive, failed, returned the wrong fixture, or you simply could not confirm a start** → treat the flag as UNRESOLVED → **EXCLUDE.** Do not fall back to "he's in the pool so pick him." Skip to the next-best **healthy** player in the same pool. There is never a reason to gamble a slot on an unconfirmed injury doubt: the pool has plenty of players in every position, so a fit replacement always exists and skipping one doubtful star costs nothing.
 5. **Named as a starter in a fresh predicted/confirmed XI for THIS match** → locked-in pick. A dated "fit/returning" note is NOT confirmation; only a fresh XI is.
 
-> **This applies to the famous names too — fame is not a team sheet.** The season-ending hard-excludes in the Protocol (Rodrygo, Militao, Estevao, de Ligt, Simons, Mitoma, …) never play. Beyond those, stars including Neymar have been picked on reputation while not starting and returned 0 — every superstar clears the same fresh-XI check as anyone else. When a big name's start cannot be confirmed, take a confirmed-starting attacker from the same favored side instead.
+> **This applies to the famous names too — fame is not a team sheet.** Players on the season-ending hard-exclude list in the Protocol never play. Beyond those, every superstar clears the same fresh-XI check as anyone else: a big name picked on reputation while not starting returns 0. When a star's start cannot be confirmed, take a confirmed-starting attacker from the same favored side instead.
 
 Confirm each surviving superstar's starting status in the lineup research below and treat confirmed/likely starters among them as locked-in picks.
 
@@ -61,7 +61,7 @@ With just two lineup sources, "both agree" is your confirmed bar. If one core so
 
 Do NOT fabricate lineups or starters, and do NOT abandon the task — fall back to the provided ground-truth data, which is valid evidence, not a guess:
 - Rank players within each position pool using `players.json` eligibility and `prior_world_cup_record` (starts, minutes, goals, assists per prior World Cup). High prior-WC minutes ≈ a reliable starter; a strong goal/assist rate ≈ attacking upside.
-- Use the web-verified star tiers and the Injury & Availability Protocol in `references/world-cup-2026-knowledge.md`. Keep the gate **FAIL-CLOSED**: with no network you cannot confirm anyone's start, so exclude every season-ending hard-exclude and any name whose start you cannot positively establish (Neymar included), and lean on prior-WC starter minutes to choose among the rest.
+- Use the star tiers and the Injury & Availability Protocol in `references/world-cup-2026-knowledge.md`. Keep the gate **FAIL-CLOSED**: with no network you cannot confirm anyone's start, so exclude any name whose start you cannot positively establish, and lean on prior-WC starter minutes to choose among the rest.
 - Only call a player a "starter" on real evidence (strong prior-WC minutes or knowledge-base star status) — never assert a start you did not read. Prefer healthy, eligible, full-90 profiles and lower your confidence accordingly.
 
 A legal XI built from board data is valid and expected when offline; an XI built from invented research is a failure even if it scores. Then continue to Step 3 (use board/knowledge-base context in place of the missing web data).
@@ -124,7 +124,7 @@ The clean-sheet bonus only pays if the player stays on the pitch 60+ minutes —
 - Player from a team known for physical play: **-0.2**
 
 ### Substitution Risk (subtract from expected value)
-An early sub forfeits both the 60-minute bonus AND the clean-sheet bonus (warmup evidence: 4 of our Argentina starters were withdrawn before 60' and returned +2 each despite a 3-0 clean sheet).
+An early sub forfeits both the 60-minute bonus AND the clean-sheet bonus.
 - Veteran (30+) center-back or holding midfielder on a heavy favorite: **-1.5** (rested once the game is safe)
 - Squad player likely to be a planned half-time/tactical sub: **-1**
 - Goalkeepers, first-choice fullbacks, the main striker, and the team's talisman: **no deduction** (full-90 profiles)
@@ -143,26 +143,26 @@ This is the highest-value habit at this stage of the tournament. By matchday 2�
 Rebuild this pool FRESH every matchday. It is never a saved whitelist — rest, knocks, and yellow-card suspensions churn it daily. (This is what makes it different from the old static injury list that burned us.)
 
 ### 4.5b — Tag 60-minute reliability (the floor's weak link)
-The 60' gate fails on exactly the players that look safest: veteran centre-backs and holding mids on heavy favorites get **hooked once the game is won**. Evidence: Otamendi and Molina *started* Argentina's 3-0 and scored **0** — subbed before 60', forfeiting both the minutes and the clean-sheet bonus. So tag every pool member:
-- **Reliable-90 anchors (prefer for the floor):** the favorite's GK, first-choice fullbacks who play 90, the talisman/main creator, the main #9 striker. A favorite's GK is the safest +4 on the board — keepers almost never come off.
-- **Early-hook risks (discount, especially on blowout favorites):** 30+ veteran CBs and holding mids who get rested at 3-0. Their clean-sheet upside is real but their 60' completion is not — do NOT treat them as floor-safe.
+The 60' gate fails on exactly the players that look safest: veteran centre-backs and holding mids on heavy favorites get **hooked once the game is won**, forfeiting both the minutes and the clean-sheet bonus. So tag every pool member:
+- **Reliable-90 anchors (prefer for the floor):** the favorite's GK, the talisman/main creator, the main #9 striker. A favorite's GK is the safest +4 on the board — keepers almost never come off.
+- **Early-hook risks (discount, especially on blowout favorites):** veteran CBs and holding mids who get rested once the game is won. Their clean-sheet upside is real but their 60' completion is not — do NOT treat them as floor-safe.
 
 ### 4.5c — Dead-rubber / rotation check
 A starter pool is only "constant" while the match still matters:
 - **Team already qualified, or already eliminated, going into this match** → expect heavy rotation or an experimental XI (most acute on the final group matchday, MD3 — read the `round` field and the preview). Drop confidence hard; prefer the motivated side, or pick from a different match.
+- **On an already-qualified / heavy favorite that WILL rotate, the first players rested are full-backs and holding/defensive mids — NOT the talisman or main #9.** On such teams, spend your slots on the nailed-on attacker(s) and GK, and avoid the rotation-prone full-back / holding-mid roles — pivot those slots to confirmed-starting attackers from another favored match. This is a frequent dead-slot leak.
 - **Must-win / still-alive match** → first XI very likely; the pool holds.
 
 Never assume an earlier matchday's lineup simply repeats — confirm against today's predicted XI and the stakes. The confirmed-starter pool you build here is the ONLY set Step 5 may draw from.
 
-## Step 5: Build Position Pools (DO THIS BEFORE PICKING)
+## Step 5: Build Position Pools
 
-Formation errors score 0. To make an illegal formation **structurally impossible**, you must select by filling position quotas, never by picking "best players" and hoping the counts work out.
+Pick your best 11 — star players and confirmed starters — and just keep each position within its limits. Sorting the pool into position groups first makes that easy and keeps the counts legal.
 
-> **There are only four buckets — no field roles.** `players.json` classifies every player as exactly one of `GK`, `DEF`, `MID`, or `FWD`. There is NO sub-role (no LW / ST / RW / CB / DM / "second striker"), and the rules never ask for one. The ONLY roster constraints are: exactly **1 GK**, **3–5 DEF**, **3–5 MID**, **1–3 FWD**, total 11. So:
-> - **GK is the exception to stacking — exactly ONE goalkeeper, EVER.** Never pick two GKs, not even to chase two clean sheets in two matches. Two GKs is an illegal split: the scoring engine applies a position penalty that EXCLUDES your higher-scoring keeper (we did this once and forfeited a +10 GK, keeping the +8 one — a pure self-inflicted loss). If two keepers both look great, pick the better one and spend the other slot on a DEF/MID/FWD. The "stack freely" rule below is for DEF/MID/FWD ONLY.
-> - Within the outfield buckets, rank purely by expected points and take the top N. **You may and often should stack same-archetype players** — three out-and-out strikers in the FWD slots, two No. 9s from different matches, five attacking/creative midfielders with zero holding mids. Whatever scores the most points.
-> - Do **not** reserve a slot for "variety" (e.g. don't keep a winger out to fit a target-man, or a goalscorer out to fit a playmaker). Two great strikers beat one great striker plus one mediocre winger.
-> - Pick the bucket split (the formation) that **maximizes total expected points** subject only to the 1 / 3–5 / 3–5 / 1–3 limits. If your best XI is six attackers and three defenders, use 1-3-4-3 or 1-3-5-2; if defenders are the value, load DEF. Let the points decide the shape, not a preferred shape decide the points.
+> **There are only four buckets — no field roles.** `players.json` classifies every player as exactly one of `GK`, `DEF`, `MID`, or `FWD`. There is NO sub-role (no LW / ST / RW / CB / DM), and the rules never ask for one. The ONLY limits are: exactly **1 GK**, **3–5 DEF**, **3–5 MID**, **1–3 FWD**, total 11. So:
+> - **Exactly ONE goalkeeper, always.** Never pick two GKs — a second GK is an illegal split and the engine voids your higher-scoring keeper. If two keepers both look great, take the better one and use the other slot on a DEF/MID/FWD.
+> - Within the outfield buckets, rank by expected points and take the top ones. **You may stack same-type players** — three strikers, or five attacking midfielders — if those are your best picks. Don't hold a high-value player out for "variety."
+> - Whichever legal split your best 11 form is your formation. Let the points decide the shape — lean to forwards (Step 6a).
 
 First, sort the **confirmed-starter pool from Step 4.5** into exactly one of four position pools, using the `position` field from `players.json` as the only authority. You are sorting the floor-filtered set, NOT all eligible players — that restriction is what locks the +4 floor. Do not infer position from web research — a player's pool is whatever `players.json` says (`GK`, `DEF`, `MID`, or `FWD`).
 
@@ -175,41 +175,33 @@ FWD pool = [pool members where position == "FWD"], sorted by expected points
 
 Confirm each position pool has enough confirmed starters to fill a legal formation: at least 1 GK, 3 DEF, 3 MID, 1 FWD. With several matches' worth of starters this is normally easy. If the floor-filtered pool is genuinely too thin in one position (rare — e.g. a one- or two-match day), backfill ONLY that position with the next-best player by `prior_world_cup_record` starter minutes — never with someone you expect to be benched. A thin pool is a reason to reach for a proven starter, never a reason to drop the floor filter entirely.
 
-## Step 6: Commit to a Formation, Then Fill Exact Quotas
+## Step 6: Pick Your Best 11 Within the Limits
 
-### 6a. Write down ONE formation as four explicit numbers
+### 6a. Lean to three forwards
 
-Pick exactly one row. Write its quotas down as `GK / DEF / MID / FWD` and treat them as a hard contract. Every legal formation sums to 11 with 1 GK, 3-5 DEF, 3-5 MID, 1-3 FWD:
+You do not need to pre-pick a formation. Take your highest-value players from the pools, keeping the counts inside 1 GK / 3–5 DEF / 3–5 MID / 1–3 FWD. Whatever legal split they form is your formation. These are all the legal splits:
 
-| Formation | GK | DEF | MID | FWD | When to Use |
-|-----------|----|----|-----|-----|-------------|
-| 1-3-5-3 | 1 | 3 | 5 | 3 | Many strong midfielders + 3 elite forwards |
-| 1-3-4-3 | 1 | 3 | 4 | 3 | 3 elite forwards, balanced midfield |
-| 1-4-3-3 | 1 | 4 | 3 | 3 | Clean-sheet team + 3 elite forwards |
-| 1-4-4-2 | 1 | 4 | 4 | 2 | Clean-sheet team + good mids, only 2 standout forwards |
-| 1-4-5-1 | 1 | 4 | 5 | 1 | Midfield-heavy, only 1 elite forward |
-| 1-5-3-2 | 1 | 5 | 3 | 2 | Multiple clean-sheet opportunities |
-| 1-5-4-1 | 1 | 5 | 4 | 1 | Extreme clean-sheet play, 1 elite forward |
+| GK | DEF | MID | FWD |
+|----|----|-----|-----|
+| 1 | 3 | 4 | 3 |
+| 1 | 4 | 3 | 3 |
+| 1 | 3 | 5 | 2 |
+| 1 | 4 | 4 | 2 |
+| 1 | 5 | 3 | 2 |
+| 1 | 4 | 5 | 1 |
+| 1 | 5 | 4 | 1 |
 
-Default to **1-4-4-2** or **1-4-3-3** if unsure — both are always legal and balanced.
+**Lean to three forwards.** Goals are where the points are, and with several matches a day there is almost always a third confirmed-starting forward on a favored side — take it. Forwards have the best ceiling, and a nailed-on striker also has a strong floor, while the players rested first are full-backs and holding mids. Drop to two forwards only when a genuine third confirmed-starter forward does not exist.
 
-### 6b. Fill each quota from ONLY its own pool
+### 6b. Take the best from each pool
 
-Take exactly the quota number from the top of each pool. Because you draw GKs only from the GK pool, you cannot end up with 2 GKs.
+Fill each position from its own pool, within the limits above. Because you draw GKs only from the GK pool, you cannot end up with 2 GKs.
 
-```
-selected_GK  = top 1 from GK pool          (always exactly 1)
-selected_DEF = top [DEF quota] from DEF pool
-selected_MID = top [MID quota] from MID pool
-selected_FWD = top [FWD quota] from FWD pool
-fantasy_xi   = selected_GK + selected_DEF + selected_MID + selected_FWD
-```
+Take exactly 1 from the GK pool, then the best players from the DEF / MID / FWD pools until you have 11, keeping each position within 3–5 DEF, 3–5 MID, 1–3 FWD (leaning to three forwards).
 
-You may swap a default top pick for a lower one in the SAME pool for strategic reasons (e.g., a confirmed starter over a benched star, or diversifying across matches). Swapping within a pool never changes the position counts, so the formation stays legal.
-
-- **Ceiling within the floor**: every player in these pools already banks the ~+4 floor (Step 4.5), so this step is pure upside — within each position take the highest goal/assist/clean-sheet potential (penalty takers and attackers on favorites, full-90 clean-sheet defenders), never the merely "safest" name. The floor is already locked; now chase points.
-- **Diversification**: Prefer spreading picks across 2-3 matches, but ONLY with players from the favored side of each match. Never roster an underdog's player just to cover a match — underdog starters cap at ~+4 with no upside (our Iceland/Congo picks in the warmup wasted 3 slots). Swap within a pool to achieve this — never by changing a position quota.
-- **Archetypes to favor within pools**: eligible superstars from Step 2.0 (always first), penalty takers on favored teams (+6 goal upside), set-piece specialists, attacking full-backs (90 min + clean sheet + assist upside), the main #9 striker.
+- **Chase points, not the "safest" name**: every confirmed starter already banks the ~+4 floor, so within each position take the highest goal/assist/clean-sheet potential — penalty takers and attackers on favorites, full-90 clean-sheet defenders.
+- **Diversification**: spread picks across 2-3 matches, but ONLY with players from the favored side of each match. Never roster an underdog's player just to cover a match — underdog starters cap at ~+4 with no upside.
+- **Archetypes to favor**: eligible superstars from Step 2.0 (always first), penalty takers on favored teams, set-piece specialists, attacking full-backs, the main #9 striker.
 
 ## Step 7: Mandatory Recount and Repair Loop
 
@@ -224,7 +216,7 @@ total     = count_GK + count_DEF + count_MID + count_FWD
 ```
 
 Check ALL of these. Every one must be true:
-- **`count_GK == 1`** — exactly one goalkeeper, NOT zero and NOT two. This is the most-failed check (we shipped two GKs once and the engine voided our higher keeper). Verify it FIRST, every time.
+- **`count_GK == 1`** — exactly one goalkeeper, NOT zero and NOT two. This is the most-failed check; a second GK voids your higher keeper. Verify it FIRST, every time.
 - `total == 11`
 - `3 <= count_DEF <= 5`
 - `3 <= count_MID <= 5`
@@ -232,7 +224,7 @@ Check ALL of these. Every one must be true:
 - All 11 `player_id` values are unique (no duplicates)
 - Every `player_id` exists in `players.json` and lists today's `matchday_id` in `eligible_matchday_ids`
 - Every `player_id` belongs to a team in a fixture that has its own research block from `match-research` (Match Coverage Contract). If you want a player from a fixture you did not research, go research that fixture first — do not pick from a blank.
-- **Every `player_id` is a confirmed/predicted STARTER for his match** — named in a fresh predicted XI (Guardian/Sports Mole), or offline a clear regular starter by prior-WC minutes. Reputation is NOT confirmation. A benched, rotated, or injured pick scores 0 and wastes a slot — we have leaked points this way on nearly every matchday. This re-verifies the Step 4.5 admission test: if any name slipped in without confirmation, drop it now and replace with a confirmed starter in the same pool.
+- **Every `player_id` is a confirmed/predicted STARTER for his match** — named in a fresh predicted XI (Guardian/Sports Mole), or offline a clear regular starter by prior-WC minutes. Reputation is NOT confirmation. A benched, rotated, or injured pick scores 0 and wastes a slot. This re-verifies the Step 4.5 admission test: if any name slipped in without confirmation, drop it now and replace with a confirmed starter in the same pool.
 
 ### If ANY check fails, repair and recount:
 - **count_GK == 2** → remove the weaker GK; add the best unused player from whichever outfield pool is below its minimum.
@@ -249,4 +241,4 @@ After ANY change, run the entire tally and checklist again from the top. Repeat 
 
 ## Step 8: Output
 
-Return the 11 `player_id` values as a JSON array of strings for `fantasy_xi`, ordered GK → DEF → MID → FWD so the formation is easy to verify. Write a short `strategy` note stating the formation you used (e.g., "1-4-4-2"), the prediction sources consulted, and your top expected scorers.
+Return the 11 `player_id` values as a JSON array of strings for `fantasy_xi`, ordered GK → DEF → MID → FWD so the counts are easy to verify. Write a short `strategy` note stating the position split you used (e.g., "1-3-4-3"), the prediction sources consulted, and your top expected scorers.

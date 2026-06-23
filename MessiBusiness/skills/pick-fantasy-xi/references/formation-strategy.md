@@ -6,10 +6,11 @@
 
 Use this decision tree to select the optimal formation for each matchday:
 
-### Question 1: How many elite forwards are available today?
-- 3 elite forwards available → Use 3 FWD (1-3-X-3 or 1-4-X-3)
-- 2 elite forwards → Use 2 FWD (1-4-4-2 or 1-5-3-2)
-- 1 elite forward → Use 1 FWD (1-5-4-1 or 1-4-5-1)
+### Question 1: How many confirmed-starting forwards on FAVORED sides are available today? (start here — three forwards is the default)
+With several matches a day there are almost always three. Goals are the points, and a talisman striker is rotation-proof where full-backs and holding mids are not.
+- 3 confirmed-starting forwards on favored sides → **Use 3 FWD (1-3-4-3 default, or 1-4-3-3 if one defence has a real clean-sheet edge)** — this is the normal case
+- Only 2 such forwards → 2 FWD (1-4-4-2 or 1-5-3-2)
+- Only 1 such forward → 1 FWD (1-5-4-1 or 1-4-5-1)
 
 ### Question 2: Are there clean sheet opportunities?
 - Yes, 2+ teams expected to keep clean sheets → Lean toward 4-5 DEF
@@ -45,7 +46,7 @@ Use this decision tree to select the optimal formation for each matchday:
 
 ## Key Principles
 
-0. "Elite forward" means an elite player on the FAVORED side of a match. An underdog's striker is never elite for fantasy purposes regardless of reputation — if you can't find 2-3 elite forwards from favored teams, drop to a 1-2 FWD formation rather than filling FWD slots with underdog players (our warmup Iceland/Congo forwards returned 4 and 2 points).
+0. "Elite forward" means an elite player on the FAVORED side of a match. An underdog's striker is never elite for fantasy purposes regardless of reputation — if you can't find 2-3 elite forwards from favored teams, drop to a 1-2 FWD formation rather than filling FWD slots with underdog players.
 1. Never pick a formation just because it sounds good — pick the one that puts your highest-expected-value players on the sheet.
 2. The formation constraint (3-5 DEF, 3-5 MID, 1-3 FWD) is a binding constraint, not a suggestion. Always validate before submitting.
 3. If forced to choose between an extra defender for clean sheet points vs an extra midfielder for goal/assist potential, favor the midfielder — goals (+6) and assists (+4) have higher expected value than clean sheets (+4) since clean sheets require the whole team to not concede.

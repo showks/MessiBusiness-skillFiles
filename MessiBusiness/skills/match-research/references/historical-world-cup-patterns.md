@@ -14,7 +14,7 @@ Data-driven baselines from past World Cups to calibrate predictions when web res
 
 ### Goal Timing Distribution (2022 World Cup)
 
-**WARNING — read the math correctly.** "% of total goals" is NOT "% of matches". To estimate a claim probability, divide the goal count by 64 matches to get goals-per-match in that window, then convert to the chance of at least one goal. An earlier version of this table confused the two, advertised `no_goal_first_10` at ~91%, and cost us an 8-point stake in the warmup (Argentina scored inside 10' vs Iceland).
+**WARNING — read the math correctly.** "% of total goals" is NOT "% of matches". To estimate a claim probability, divide the goal count by 64 matches to get goals-per-match in that window, then convert to the chance of at least one goal. Confusing the two overstates `no_goal_first_10` badly (it is ~75-80% at best, not ~91%).
 
 | Period | Goals Scored | % of Total | Per-Match Rate | Claim Relevance |
 |--------|-------------|------------|----------------|-----------------|

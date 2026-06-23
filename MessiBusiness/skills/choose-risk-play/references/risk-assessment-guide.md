@@ -2,14 +2,14 @@
 
 ## Expected Value Calculation
 
-For each claim, the expected value (EV) determines if it's worth taking:
+The stake is `stake_pct × your same-day Fantasy XI score`. For each claim, expected value determines if it's worth taking:
 
 ```
 EV = (win_probability * stake) - (loss_probability * stake)
-EV = stake * (2 * win_probability - 1)
+EV = stake * (2 * win_probability - 1)        # stake = stake_pct * same-day XI score
 ```
 
-A claim is only +EV when win probability exceeds 50%.
+A claim is only +EV when win probability exceeds 50%. Maximize `stake_pct × (2P − 1)`: a high-confidence Green is the default, and Red claims (sub-50% P) are bad bets.
 
 ### Green Claims (15% stake)
 - Break-even: 50% win rate
@@ -23,9 +23,7 @@ A claim is only +EV when win probability exceeds 50%.
 
 ### Red Claims (35% stake)
 - Break-even: 50% win rate
-- At 60% win rate: EV = +0.35 * 0.2 * points = +7% of points
-- Most Red claims have <50% win rate = negative EV
-- Only take Red when behind and need high variance
+- Every real Red claim (`team_wins_by_3plus` ~18%, `exact_score` ~10%, `player_scores_2plus` ~12%) is well under 50% → **negative EV**. Do not take Red on a normal day.
 
 ## World Cup Statistical Baselines
 
@@ -36,7 +34,7 @@ These historical averages inform claim probability estimates:
 - Matches with 2+ goals: ~75%
 - Matches with 3+ goals: ~52%
 - Matches with both teams scoring: ~50%
-- Goals in first 10 minutes: ~20-25% of matches — and noticeably HIGHER when a heavy favorite plays (they press from kickoff; warmup evidence: Argentina scored inside 10' vs Iceland). `no_goal_first_10` is ~75-80% at best, not 85-90%.
+- Goals in first 10 minutes: ~20-25% of matches — and noticeably HIGHER when a heavy favorite plays (they press from kickoff). `no_goal_first_10` is ~75-80% at best, not 85-90%.
 - Goals before halftime: ~75% of matches
 - Goals in stoppage time: ~22-25% of matches (modern stoppage periods are long) — `no_goal_stoppage_time` is ~75%, not 80%+
 
@@ -66,7 +64,7 @@ Best claims:
 2. YELLOW `team_scores_first` for the favorite (~70%)
 3. RED `team_wins_by_3plus` if mismatch is extreme (~20-25%)
 
-**NEVER take `no_goal_first_10` in this profile** — heavy favorites often score early (~60-65% claim probability here, far below Green standards). This exact mistake cost us 8 points in the warmup (Argentina scored inside 10' vs Iceland; the final was 3-0, so `match_2plus_goals` would have won).
+**NEVER take `no_goal_first_10` in this profile** — heavy favorites often score early (~60-65% claim probability here, far below Green standards). Take `match_2plus_goals` instead.
 
 ### Profile B: Two Strong Teams
 Best claims:
@@ -87,33 +85,16 @@ Best claims:
 2. RED `match_goes_to_extra_time` (~25% — if teams are evenly matched)
 3. GREEN `no_goal_first_10` (~80% — knockout matches start cautiously, but still avoid when one side is a heavy favorite)
 
-## Adaptive Risk Table
+## Rank Does Not Drive Risk
 
-| Your Rank Percentile | Points | Recommended Risk Level | Rationale |
-|----------------------|--------|----------------------|-----------|
-| Top 10% | High | GREEN only | Protect lead, compound safely |
-| 10-25% | Moderate-High | GREEN, occasional YELLOW | Maintain position |
-| 25-50% | Moderate | YELLOW preferred | Need gains to climb |
-| 50-75% | Moderate-Low | YELLOW or careful RED | Need to make moves |
-| Bottom 25% | Low | RED when supported | Nothing to lose, need big swings |
-| Very low points (<15) | Any | Aggressive RED | Stake amounts are trivial |
+The stake is a percentage of one day's Fantasy XI score, so the math is identical whether you are 1st or last:
 
-## Compound Effect Example
+- **Every rank plays the same claim: the highest-EV one, almost always Green `match_2plus_goals` on the strongest favorite.**
+- Do not raise aggression because you are behind — the stake is too small to catch up via variance, and Red is negative-EV.
+- The only legitimate upgrade is Yellow `match_2plus_yellow_cards` when read evidence puts a physical match at ~70%+.
 
-Starting at 50 points, hitting a Green claim each day:
-- Day 1: 50 + (50 * 0.15) = 57.5 → 58 points (rounding)
-- Day 5: ~76 points
-- Day 10: ~102 points
+## Calibration Notes
 
-Starting at 50 points, hitting a Yellow claim each day:
-- Day 1: 50 + (50 * 0.25) = 62.5 → 63 points
-- Day 5: ~95 points
-- Day 10: ~155 points
-
-The compounding effect makes consistent correct risk plays extremely powerful over a full tournament. This is why claim probability matters more than claim size.
-
-## Calibration Log (update after every matchday)
-
-| Date | Claim taken | Match context | Result | Lesson |
-|------|-------------|---------------|--------|--------|
-| 2026-06-10 (warmup) | `no_goal_first_10` (Green, 8-pt stake) | Argentina (heavy favorite) vs Iceland | LOST -8 — Argentina scored inside 10' | Never `no_goal_first_10` against a heavy favorite. Final was 3-0 and the other match 1-2, so `match_2plus_goals` would have won on either match — that's what the +8 teams above us took. |
+- Default to Green `match_2plus_goals` on the strongest favorite.
+- Never take `no_goal_first_10` against a heavy favorite — they press from kickoff.
+- Never take a Red claim on a normal day — all are negative-EV.
