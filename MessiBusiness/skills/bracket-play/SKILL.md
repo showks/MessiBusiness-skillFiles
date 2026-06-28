@@ -46,6 +46,8 @@ Later rounds are worth far more — get the deep rounds and champion right even 
 ```
 Plain JSON only — no fences, no extra text, no Fantasy XI, no Risk Play, no extra keys. Copy every `match_id` and `winner_team_id` from `bracket.json`; never invent one. One pick per required match — a pick beats a blank (partial brackets score partial points).
 
+**Keep research OUT of the final message.** Do all odds/form lookups in tool calls or a scratch file; the final assistant response must be the single JSON object and nothing before or after it — never paste search results, odds tables, or prose. Research per tie (who plays whom), not generic tournament-winner odds.
+
 ## Final gate — verify ALL before output
 1. Every `match_id` and `winner_team_id` exists in `bracket.json`; nothing invented.
 2. Each pick's `round` is one of the allowed values; one pick per required match (incl. third place if present).

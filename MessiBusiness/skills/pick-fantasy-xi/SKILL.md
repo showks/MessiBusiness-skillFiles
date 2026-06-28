@@ -1,6 +1,6 @@
 ---
 name: pick-fantasy-xi
-description: Pick the 11 best-scoring valid players from players.json — proven World Cup starters across all of the day's favored teams, strictly within the position limits.
+description: Pick the 11 best-scoring valid players from players.json — proven World Cup starters across the day's favored teams, built into a locked legal shape so the position caps can never be exceeded.
 ---
 
 # Pick Fantasy XI
@@ -11,25 +11,36 @@ Pick the 11 best-scoring players, each one a real id copied from `game-board/pla
 Start +2 · plays 60+ min +2 · goal **+6** · assist **+4** · clean sheet (DEF/GK, needs 60 min) **+4** · GK 3+ saves +2 · yellow −1 · red −3 · own goal −3.
 A confirmed starter floors at +4; goals and assists are the upside — attackers and penalty-takers have the highest ceilings, full-90 defenders/keepers on a favorite add clean-sheet value.
 
-## Position limits — NEVER exceed (the rule we most often break)
-Exactly **1 GK · 3–5 DEF · 3–5 MID · 1–3 FWD · 11 total**. Keep a **live count of each position** as you add players. The instant a position reaches its max — GK 1, DEF 5, MID 5, FWD 3 — you may add NO more of that position; take the next-best player in a position that still has room. (Exceeding a limit makes the engine drop your highest-scoring over-limit player, wasting your best pick there.) Minimums matter too: you must end with ≥1 GK, ≥3 DEF, ≥3 MID, ≥1 FWD.
+## Lock your shape FIRST — this is how we stop busting the forward cap
+Before naming a single player, pick ONE legal shape from this menu and write it at the top of your work (`GK-DEF-MID-FWD`, each sums to 11):
 
-## Who to pick — across the WHOLE matchday
-- **Consider the favored side of EVERY fixture in `matches.json`, not just one match.** Build a single candidate pool from all of the day's favored teams, rank it by expected points, and take the best 11. Never build the XI around one fixture — at most ~4 players from any single team.
-- Each candidate must be a **proven starter this World Cup** (started and played his team's recent 2026 WC match — from match-research), on the **favored side**, and not injured or suspended today.
-- Include each favored team's **star / talisman and penalty taker** if they have been starting. On an already-qualified team, prefer its nailed-on stars over rotation candidates.
+> **1-4-3-3** (default — we lean attack) · 1-3-4-3 · 1-4-4-2 · 1-3-5-2 · 1-5-3-2
 
-## How to pick — every id from players.json
-1. For each player you want, **find him in `players.json`** and copy his exact `player_id` and `position`. If he is not in the file, pick someone else — never invent, guess, or shorten an id.
-2. Add players best-first, respecting the live position count above. Stop at 11.
+**No legal shape has 4 forwards.** Once you commit to a shape you fill *exactly* that many of each position — never one more — so 4 FWD becomes impossible by construction. Default to a 3-forward shape; only drop to 2 forwards if you genuinely cannot find a third starting forward worth a slot.
 
-## Final gate — write all 11 out as `id — name — position`, then verify
-1. **Counts: exactly 1 GK, 3–5 DEF, 3–5 MID, 1–3 FWD, 11 total, no duplicates** — tally them now from the list.
+## Who to pick — across the day's fixtures
+- **Consider the favored side of EVERY fixture in `matches.json`.** Build one candidate pool from all the day's favored teams, rank by expected points, take the best 11.
+- **Multi-fixture day:** spread across teams — at most ~4 players from any single team, ≥2 teams.
+- **Single-fixture day (a knockout match):** the spread rule does not apply — load the favored team; the position caps below still do.
+- Each candidate must be a **proven starter this World Cup** (started and played his team's recent 2026 WC match — from match-research), on the **favored side**, not injured or suspended today.
+- Include each favored team's **star / talisman and penalty taker** if they have been starting; on an already-qualified team prefer nailed-on stars over rotation candidates.
+
+## How to pick — build the spine first, forwards LAST, every id from players.json
+Fill your locked shape in this order, keeping a running count:
+1. **GK (1):** the favored side's starting keeper.
+2. **DEF (your shape's count):** best proven starters; full-90 defenders on a favorite for clean-sheet value.
+3. **MID (your shape's count):** best proven starters; prioritise penalty-takers and goal threats.
+4. **FWD LAST (your shape's count — never more than 3):** add forwards only now, best-first, and **STOP the instant you reach your shape's forward count.** Tempted by one more forward? You have the wrong shape or the wrong player — take a midfielder instead.
+
+For each player, find him in `players.json` and copy his exact `player_id` and `position`. **Use the file's `position`, not your own guess** — a winger the file labels MID counts as MID. If he is not in the file, pick someone else; never invent, guess, or shorten an id.
+
+## Final gate — write all 11 as `id — name — position`, then tally OUT LOUD
+1. **Count each position on its own line:** `GK=_ DEF=_ MID=_ FWD=_ TOTAL=_`. It must read **GK=1, DEF=3–5, MID=3–5, FWD=1–3, TOTAL=11**, no duplicates, and match your locked shape. **If FWD>3, delete the weakest forward(s) and replace each with the best available DEF/MID before anything else, then re-tally.**
 2. Every id is in `players.json` and eligible today.
 3. Every player is a proven starter this World Cup.
-4. Players come from multiple fixtures (≥2–3 teams, ≤~4 from one).
+4. Multi-fixture day: ≥2 teams, ≤~4 from one. Single-fixture day: loading the favored team is fine.
 
-If any check fails, fix it and re-tally. Do not output until all four pass.
+Do not output until every line passes.
 
 ## Output
 Return the 11 `player_id` strings for `fantasy_xi`, ordered GK → DEF → MID → FWD.
