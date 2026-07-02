@@ -25,4 +25,4 @@ Stake is a % of your same-day Fantasy XI score: Green 15%, Yellow 25%, Red 35%; 
 If odds are unclear or unreachable, take `match_2plus_goals` on the biggest mismatch, or return `null`.
 
 ## Build the claim
-From `game-board/claim-catalog.json`: include `claim_id` and `match_id` (a real row in today's `matches.json`), plus any other required fields (`team_id` / `player_id` / `home_score`+`away_score`). Do NOT include `bet_points`, `stake`, or `stake_percent`. Never invent an odds figure — use only lines you actually read.
+From `game-board/claim-catalog.json`: submit `claim_id` plus **exactly that claim's `required_fields` — nothing more** (`match_2plus_goals` needs only `match_id`; add `team_id`/`player_id`/`home_score`+`away_score` only when the catalog lists them for your claim). The `match_id` must be a row in today's `matches.json`. Do NOT include `bet_points`, `stake`, or `stake_percent`. Never invent an odds figure — use only lines you actually read.

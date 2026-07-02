@@ -8,7 +8,7 @@ description: List today's board fixtures and find each match's favorite plus eac
 You have a 5-minute total runtime budget for the whole submission, so research efficiently — focus on the favored teams, a couple of targeted searches each, not an exhaustive sweep.
 
 ## 1. List today's fixtures from the board
-Read `game-board/matches.json`. For each row, resolve `home_team_id` and `away_team_id` through `teams.json` and write: `match_id — Home vs Away`. **These are the only fixtures.** Do not search for, mention, or pick from any team that is not in this list, and never pair two teams that are not in the same row.
+Read `game-board/matches.json`. For each row, resolve `home_team_id` and `away_team_id` through `teams.json` and write: `match_id — Home vs Away`. **These are the only fixtures.** Do not search for, mention, or pick from any team that is not in this list, and never pair two teams that are not in the same row. If a search result describes a different pairing than the row (a different opponent, or a team not in it), it is about some other match — discard it and re-check the row's names in `teams.json`; the board is always right.
 
 ## 2. For each fixture, find two things
 - **The favorite.** Check win odds on Kalshi/Polymarket and Forebet (`"[Home] vs [Away] prediction"`). Note the stronger team and whether 2+ goals look likely.
