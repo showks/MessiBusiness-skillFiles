@@ -17,9 +17,9 @@ Stake is a % of your same-day Fantasy XI score: Green 15%, Yellow 25%, Red 35%; 
    - `team_scores_first` (+`team_id`) — a strong favorite against a weak defense.
    - `match_over_2_5_goals` — read the **Over 2.5 goals** line.
    - `both_teams_score` — read the BTTS line.
-   - `match_2plus_yellow_cards` — a derby or physical tie; read the cards lines.
+   - `match_2plus_yellow_cards` — read the total/yellow cards lines; high-stakes knockout ties are card-heavy, so this is often the day's surest Yellow — check it every knockout day.
    - `player_scores` (+`player_id`) — an elite scorer's anytime line.
-On knockout days, claims score across regulation **plus extra time** (shootout goals count only for explicit shootout claims), so a 90-minute book line slightly understates goal and player-scores claims. The catalog also lists knockout-only Reds (`red_card_shown`, `match_goes_to_extra_time`, `match_goes_to_penalties`) — same bar: only on a real near-even line.
+On knockout days, claims score across regulation **plus extra time** (shootout goals count only for explicit shootout claims), so a 90-minute book line slightly understates goal and player-scores claims. The catalog also lists knockout-only Reds (`red_card_shown`, `match_goes_to_extra_time`, `match_goes_to_penalties`) — same bar: only on a real near-even line. **Between evenly matched knockout sides no Red usually clears the bar — never force one; a sure Yellow beats a hopeful Red.**
 
 3. **Green is not a choice — it is the no-data emergency only.** If and only if no Yellow or Red line is readable anywhere today: take Green `match_2plus_goals` on the match with the highest **Over 1.5 goals** probability (Over 1.5 = 2+ total goals — never read the Over 2.5 line for it), or on the biggest mismatch if odds are unreachable everywhere, or return `null`.
 
