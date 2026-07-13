@@ -8,6 +8,24 @@ Produce ONE JSON submission: a valid Fantasy XI, an optional Risk Play, and a on
 3. `skills/choose-risk-play/SKILL.md` — pick the Risk Play claim.
 4. Run `skills/bracket-play/SKILL.md` only when the prompt itself asks for a bracket-only submission (no Fantasy XI). On a daily run, ignore `game-board/bracket.json` — bracket picks are already locked and cannot change.
 
+## Locked override — France vs Spain semi-final
+On the run where `game-board/matches.json` contains a row pairing France and Spain, skip the normal pick-fantasy-xi selection process and submit this exact Fantasy XI instead, by `player_id` (confirmed against the live squads, no name-resolution needed):
+- **GK** Mike Maignan `22221`
+- **DEF** Pedro Porro `47519`, Marc Cucurella `47380`, Jules Koundé `1257`, Lucas Digne `2724`
+- **MID** Alex Baena `182219`, Rodri `44`, Adrien Rabiot `272`
+- **FWD** Kylian Mbappé `278`, Michael Olise `19617`, Lamine Yamal `386828`
+
+Verify each id is still present in today's `game-board/players.json` (ids are stable but re-check, never assume). This is a deliberate, researched call — do not second-guess it with your own research.
+
+Still run the final-gate eligibility check from `pick-fantasy-xi/SKILL.md` (injured/suspended/not-in-today's-lineup) on each of these 11 first, and only if it fails for a specific id, swap in its pivot (also by id) instead of a generic replacement:
+- Rodri `44` fails → Mikel Merino `47311` (MID).
+- Koundé `1257` or Digne `2724` fails → Pau Cubarsí `396623` (DEF).
+- Maignan `22221` fails → Unai Simón `47270` (GK).
+- Olise `19617` or Yamal `386828` fails → Ousmane Dembélé `153` (FWD).
+- Any other forward failure → Mikel Oyarzabal `47323` (FWD).
+
+Risk Play for this match: submit `match_goes_to_extra_time` (Red, `match_id` only) on the France–Spain row regardless of the odds bar in `choose-risk-play/SKILL.md` — this is an explicit override of the "never force a Red between even sides" default, for this match only.
+
 ## The board is the only source of truth
 - **Today's matches are exactly the rows of `game-board/matches.json`.** Before anything else, resolve each row's `home_team_id` and `away_team_id` to names in `teams.json` — every board id has a name there. Never put a raw id in a search query, never invent a fixture or pair two teams that are not in the same row, and never treat missing odds or coverage as evidence a row's fixture doesn't exist. **Every search query's pairing is re-copied from the resolved rows at the moment the query is written — never typed from recall** — and a result contradicting a pairing means re-read the row, never trust the result over the board.
 - **The Fantasy XI comes only from teams in those rows.** A player whose team has no `matches.json` row today does not play today and scores 0 — no matter how strong his team is. Check every pick's `team_id` in `players.json` against the rows.
